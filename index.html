@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ID Digital Local</title>
+    <title>ID Digital Local PRO</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         body {
@@ -16,34 +15,46 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        .main-card {
+        .pro-card {
             background: #fff;
             border-radius: 18px;
             box-shadow: 0 4px 24px #0002;
             padding: 32px 22px 28px 22px;
-            max-width: 370px;
-            width: 92vw;
+            max-width: 400px;
+            width: 95vw;
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 40px;
         }
-        .main-title {
+        .pro-title {
             font-size: 2em;
             font-weight: bold;
             color: #2176d2;
             margin-bottom: 10px;
             text-align: center;
         }
-        .main-desc {
+        .pro-desc {
             color: #444;
             font-size: 1.08em;
             margin-bottom: 28px;
             text-align: center;
         }
-        .main-btn {
+        .pro-features {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+        .pro-features li {
+            margin-bottom: 10px;
+            font-size: 1.08em;
+            color: #2176d2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pro-btn {
             background: #25D366;
             color: #fff;
             border: none;
@@ -60,101 +71,31 @@
             gap: 10px;
             transition: background 0.2s;
         }
-        .main-btn:hover {
+        .pro-btn:hover {
             background: #2176d2;
         }
         @media (max-width: 480px) {
-            .main-card { padding: 18px 6vw 18px 6vw; }
-            .main-title { font-size: 1.4em; }
+            .pro-card { padding: 18px 6vw 18px 6vw; }
+            .pro-title { font-size: 1.4em; }
         }
     </style>
 </head>
 <body>
-    <div class="main-card">
-        <div class="welcome-logo" style="width:70px;height:70px;border-radius:16px;margin-bottom:18px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;font-size:2.5em;color:#2176d2;"><i class="fa-solid fa-id-card"></i></div>
-        <div class="main-title" id="tituloBienvenida">ID DIGITAL LOCAL DM</div>
-        <div class="main-desc" id="descBienvenida">Gestiona y comparte tu identidad digital y contactos de forma fácil, rápida y segura desde tu móvil o PC.</div>
-        <button class="main-btn" onclick="window.location.href='ID.html'">
-            <i class="fa-solid fa-arrow-right"></i> <span id="txtEmpezar">Empezar</span>
-        </button>
-        <button id="btnInstalarApp" class="main-btn" style="background:#2176d2;margin-top:12px;display:none;">
-            <i class="fa-solid fa-download"></i> <span id="txtInstalar">Instalar app</span>
-        </button>
-        <select id="selectorIdioma" style="margin-top:18px;padding:4px 8px;border-radius:6px;width:120px;">
-            <option value="es">ES</option>
-            <option value="en">EN</option>
-            <option value="fr">FR</option>
-        </select>
+    <div class="pro-card">
+        <div class="pro-title"><i class="fa-solid fa-id-card"></i> ID DIGITAL LOCAL <span style="color:#25D366;">PRO</span></div>
+        <div class="pro-desc">Gestiona tu identidad digital y contactos con funciones avanzadas, seguridad y personalización total.</div>
+        <ul class="pro-features">
+            <li><i class="fa-solid fa-cloud-arrow-up"></i> Sincronización en la nube</li>
+            <li><i class="fa-solid fa-file-export"></i> Exportar/Importar contactos</li>
+            <li><i class="fa-solid fa-palette"></i> Personalización avanzada</li>
+            <li><i class="fa-solid fa-qrcode"></i> Escaneo QR para agregar</li>
+            <li><i class="fa-solid fa-lock"></i> Seguridad PRO (PIN, biometría)</li>
+            <li><i class="fa-solid fa-chart-line"></i> Estadísticas de uso</li>
+            <li><i class="fa-solid fa-note-sticky"></i> Notas privadas</li>
+            <li><i class="fa-solid fa-language"></i> Multi-idioma</li>
+            <li><i class="fa-solid fa-badge-check"></i> Sin publicidad</li>
+        </ul>
+        <button class="pro-btn"><i class="fa-solid fa-arrow-right"></i> Empezar ahora</button>
     </div>
-        <script>
-        // Registrar service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-        </script>
-        <script src="lang.js"></script>
-            <script>
-            let deferredPrompt;
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                document.getElementById('btnInstalarApp').style.display = 'flex';
-            });
-            document.getElementById('btnInstalarApp').onclick = function() {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        deferredPrompt = null;
-                        document.getElementById('btnInstalarApp').style.display = 'none';
-                    });
-                }
-            };
-            </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function traducirBienvenida() {
-                document.getElementById('tituloBienvenida').textContent = t('bienvenido');
-                document.getElementById('descBienvenida').textContent = {
-                    es: 'Gestiona y comparte tu identidad digital y contactos de forma fácil, rápida y segura desde tu móvil o PC.',
-                    en: 'Manage and share your digital identity and contacts easily, quickly and securely from your mobile or PC.',
-                    fr: 'Gérez et partagez votre identité numérique et vos contacts facilement, rapidement et en toute sécurité depuis votre mobile ou PC.'
-                }[getLang()];
-                document.getElementById('txtEmpezar').textContent = t('guardar');
-                document.getElementById('txtInstalar').textContent = {
-                    es: 'Instalar app',
-                    en: 'Install app',
-                    fr: 'Installer l\'app'
-                }[getLang()];
-            }
-            traducirBienvenida();
-            const selector = document.getElementById('selectorIdioma');
-            selector.value = getLang();
-            selector.onchange = function() {
-                setLang(this.value);
-            };
-        });
-    </script>
-</div>
-<script>
-    document.querySelector('.main-btn').onclick = function() {
-        let data = localStorage.getItem('profileData');
-        let isEmpty = true;
-        if (data) {
-            try {
-                let obj = JSON.parse(data);
-                // Considera lleno si tiene nombre y empresa
-                if ((obj && (obj.nombre || obj.empresa))) {
-                    isEmpty = false;
-                }
-            } catch(e) {}
-        }
-        if (isEmpty) {
-            window.location.href = 'Formulario de perfil.html';
-        } else {
-            window.location.href = 'ID.html';
-        }
-    };
-</script>
 </body>
 </html>
-
