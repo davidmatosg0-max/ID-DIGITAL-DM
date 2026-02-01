@@ -3,10 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ID Digital Local PRO</title>
+    <title><script>document.write(t('id_digital_local'))</script></title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+                        /* Botón de instalación moderno */
+                        #btnInstalarApp {
+                            background: linear-gradient(90deg, #2176d2 60%, #25D366 100%);
+                            color: #fff;
+                            border: none;
+                            border-radius: 18px;
+                            padding: 12px 0;
+                            width: 100%;
+                            font-size: 1.08em;
+                            font-weight: 600;
+                            box-shadow: 0 2px 8px #0001;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 10px;
+                            margin-top: 14px;
+                            transition: background 0.2s, box-shadow 0.2s;
+                        }
+                        #btnInstalarApp:hover {
+                            background: linear-gradient(90deg, #25D366 60%, #2176d2 100%);
+                            box-shadow: 0 4px 16px #25D36644;
+                        }
+                /* Selector de idioma moderno */
+                #selectorIdioma {
+                    background: #f4f4f4;
+                    color: #2176d2;
+                    border: 1.5px solid #25D366;
+                    border-radius: 18px;
+                    padding: 8px 18px 8px 36px;
+                    font-size: 1.08em;
+                    font-weight: 600;
+                    box-shadow: 0 2px 8px #0001;
+                    outline: none;
+                    appearance: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    background-image: url('data:image/svg+xml;utf8,<svg fill="%232176d2" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+                    background-repeat: no-repeat;
+                    background-position: 10px center;
+                    transition: border 0.2s, box-shadow 0.2s;
+                }
+                #selectorIdioma:focus {
+                    border: 2px solid #2176d2;
+                    box-shadow: 0 0 0 2px #25D36644;
+                }
+                #selectorIdioma option {
+                    background: #fff;
+                    color: #2176d2;
+                    font-weight: 600;
+                }
         body {
             min-height: 100vh;
             margin: 0;
@@ -15,46 +67,34 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        .pro-card {
+        .main-card {
             background: #fff;
             border-radius: 18px;
             box-shadow: 0 4px 24px #0002;
             padding: 32px 22px 28px 22px;
-            max-width: 400px;
-            width: 95vw;
+            max-width: 370px;
+            width: 92vw;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 40px;
         }
-        .pro-title {
+        .main-title {
             font-size: 2em;
             font-weight: bold;
             color: #2176d2;
             margin-bottom: 10px;
             text-align: center;
         }
-        .pro-desc {
+        .main-desc {
             color: #444;
             font-size: 1.08em;
             margin-bottom: 28px;
             text-align: center;
         }
-        .pro-features {
-            width: 100%;
-            margin-bottom: 24px;
-        }
-        .pro-features li {
-            margin-bottom: 10px;
-            font-size: 1.08em;
-            color: #2176d2;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .pro-btn {
+        .main-btn {
             background: #25D366;
             color: #fff;
             border: none;
@@ -71,31 +111,289 @@
             gap: 10px;
             transition: background 0.2s;
         }
-        .pro-btn:hover {
+        .main-btn:hover {
             background: #2176d2;
         }
         @media (max-width: 480px) {
-            .pro-card { padding: 18px 6vw 18px 6vw; }
-            .pro-title { font-size: 1.4em; }
+            .main-card { padding: 18px 6vw 18px 6vw; }
+            .main-title { font-size: 1.4em; }
         }
     </style>
 </head>
 <body>
-    <div class="pro-card">
-        <div class="pro-title"><i class="fa-solid fa-id-card"></i> ID DIGITAL LOCAL <span style="color:#25D366;">PRO</span></div>
-        <div class="pro-desc">Gestiona tu identidad digital y contactos con funciones avanzadas, seguridad y personalización total.</div>
-        <ul class="pro-features">
-            <li><i class="fa-solid fa-cloud-arrow-up"></i> Sincronización en la nube</li>
-            <li><i class="fa-solid fa-file-export"></i> Exportar/Importar contactos</li>
-            <li><i class="fa-solid fa-palette"></i> Personalización avanzada</li>
-            <li><i class="fa-solid fa-qrcode"></i> Escaneo QR para agregar</li>
-            <li><i class="fa-solid fa-lock"></i> Seguridad PRO (PIN, biometría)</li>
-            <li><i class="fa-solid fa-chart-line"></i> Estadísticas de uso</li>
-            <li><i class="fa-solid fa-note-sticky"></i> Notas privadas</li>
-            <li><i class="fa-solid fa-language"></i> Multi-idioma</li>
-            <li><i class="fa-solid fa-badge-check"></i> Sin publicidad</li>
-        </ul>
-        <button class="pro-btn"><i class="fa-solid fa-arrow-right"></i> Empezar ahora</button>
+            <!-- Modal sugerencia instalación -->
+            <div id="modalInstalar" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:2000;align-items:center;justify-content:center;">
+                <div style="background:#fff;padding:28px 18px 18px 18px;border-radius:18px;max-width:340px;width:90vw;box-shadow:0 4px 24px #2176d244;display:flex;flex-direction:column;align-items:center;">
+                    <div style="font-size:2.2em;color:#25D366;margin-bottom:10px;"><i class="fa-solid fa-download"></i></div>
+                    <div id="modalMsgInstalar" style="font-size:1.1em;color:#2176d2;margin-bottom:16px;text-align:center;">¿Quieres instalar esta app en tu dispositivo para acceder más rápido y sin conexión?</div>
+                    <div id="modalMsgShortcut" style="font-size:0.98em;color:#444;margin-bottom:14px;text-align:center;display:none;"></div>
+                    <button id="btnVerInstrucciones" style="background:#e0e0e0;color:#2176d2;border:none;border-radius:12px;padding:7px 18px;font-size:0.98em;font-weight:600;cursor:pointer;margin-bottom:10px;">¿Cómo crear acceso directo?</button>
+                    <div id="pasosShortcut" style="display:none;font-size:0.97em;color:#2176d2;background:#f4f4f4;border-radius:10px;padding:12px 10px;margin-bottom:10px;text-align:left;"></div>
+                    <button id="modalBtnCerrar" style="background:#eee;color:#2176d2;border:none;border-radius:14px;padding:8px 18px;font-size:0.98em;font-weight:600;cursor:pointer;">Ahora no</button>
+                </div>
+            </div>
+    <div class="main-card">
+            <!-- Botón de cargar datos de ejemplo eliminado -->
+            <div style="width:100%;display:flex;justify-content:center;margin-top:24px;">
+                <button id="btnDescargarApp" title="Descargar/Instalar app" aria-label="Descargar/Instalar app" style="background:linear-gradient(135deg,#25D366 60%,#2176d2 100%);color:#fff;border:none;border-radius:50%;width:60px;height:60px;box-shadow:0 4px 16px #25D36644,0 1.5px 6px #2176d233;display:flex;align-items:center;justify-content:center;font-size:2em;cursor:pointer;transition:background 0.2s;">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
+                <!-- Modal de ayuda para instalar/descargar -->
+                <div id="modalAyudaDescarga" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:3000;align-items:center;justify-content:center;">
+                    <div style="background:#fff;padding:28px 18px 18px 18px;border-radius:18px;max-width:340px;width:90vw;box-shadow:0 4px 24px #2176d244;display:flex;flex-direction:column;align-items:center;">
+                        <div style="font-size:2.2em;color:#25D366;margin-bottom:10px;"><i class="fa-solid fa-download"></i></div>
+                        <div id="txtAyudaDescarga" style="font-size:1.1em;color:#2176d2;margin-bottom:16px;text-align:center;"></div>
+                        <button id="btnCerrarAyudaDescarga" style="background:#eee;color:#2176d2;border:none;border-radius:14px;padding:8px 18px;font-size:0.98em;font-weight:600;cursor:pointer;">Cerrar</button>
+                    </div>
+                </div>
+                <script>
+                // Traducción para el botón y modal de descarga/instalación
+                function esMovil() {
+                    return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+                }
+                function traducirDescargaApp() {
+                    var lang = (typeof getLang === 'function') ? getLang() : 'es';
+                    var isMobile = esMovil();
+                    var textos = {
+                        es: {
+                            tooltip: 'Descargar/Instalar app',
+                            ayuda: isMobile
+                                ? 'En tu móvil, abre el menú del navegador (⋮ o ⬆️) y selecciona <b>"Agregar a pantalla de inicio"</b> o <b>"Instalar app"</b>.'
+                                : 'En tu ordenador, abre el menú del navegador (⋮ o ≡) y selecciona <b>"Instalar app"</b> o <b>"Agregar a pantalla de inicio"</b>.'
+                        },
+                        en: {
+                            tooltip: 'Download/Install app',
+                            ayuda: isMobile
+                                ? 'On your mobile, open the browser menu (⋮ or ⬆️) and select <b>"Add to Home Screen"</b> or <b>"Install app"</b>.'
+                                : 'On your computer, open the browser menu (⋮ or ≡) and select <b>"Install app"</b> or <b>"Add to Home Screen"</b>.'
+                        },
+                        fr: {
+                            tooltip: 'Télécharger/Installer l\'app',
+                            ayuda: isMobile
+                                ? 'Sur votre mobile, ouvrez le menu du navigateur (⋮ ou ⬆️) et sélectionnez <b>"Ajouter à l\'écran d\'accueil"</b> ou <b>"Installer l\'application"</b>.'
+                                : 'Sur votre ordinateur, ouvrez le menu du navigateur (⋮ ou ≡) et sélectionnez <b>"Installer l\'application"</b> ou <b>"Ajouter à l\'écran d\'accueil"</b>.'
+                        }
+                    };
+                    var btn = document.getElementById('btnDescargarApp');
+                    if(btn) {
+                        btn.title = textos[lang].tooltip;
+                        btn.setAttribute('aria-label', textos[lang].tooltip);
+                    }
+                    var ayudaDiv = document.getElementById('txtAyudaDescarga');
+                    if(ayudaDiv) {
+                        ayudaDiv.innerHTML = textos[lang].ayuda;
+                        ayudaDiv.style.display = 'block';
+                    }
+                }
+                document.addEventListener('DOMContentLoaded', function() {
+                    traducirDescargaApp();
+                    var btnDescargar = document.getElementById('btnDescargarApp');
+                    var modalAyuda = document.getElementById('modalAyudaDescarga');
+                    var btnCerrarAyuda = document.getElementById('btnCerrarAyudaDescarga');
+                    if(btnDescargar && modalAyuda && btnCerrarAyuda) {
+                        btnDescargar.onclick = function() {
+                            // Intentar disparar el prompt de instalación si es posible
+                            if(window.deferredPrompt) {
+                                window.deferredPrompt.prompt();
+                            } else {
+                                traducirDescargaApp(); // Asegura texto correcto según dispositivo
+                                modalAyuda.style.display = 'flex';
+                                modalAyuda.style.alignItems = 'center';
+                                modalAyuda.style.justifyContent = 'center';
+                            }
+                        };
+                        btnCerrarAyuda.onclick = function() {
+                            modalAyuda.style.display = 'none';
+                        };
+                    }
+                    // Sincronizar traducción si cambia el idioma global
+                    window.addEventListener('storage', function(e) {
+                        if(e.key === 'lang') setTimeout(traducirDescargaApp, 100);
+                    });
+                    // Recargar la página al cambiar el selector de idioma
+                    var selector = document.getElementById('selectorIdioma');
+                    if(selector) {
+                        selector.addEventListener('change', function() {
+                            localStorage.setItem('lang', this.value);
+                            location.reload();
+                        });
+                    }
+                });
+                </script>
+        <div class="welcome-logo" style="width:110px;height:110px;border-radius:28px;margin-bottom:22px;background:linear-gradient(135deg,#2176d2 60%,#25D366 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px #2176d244;font-size:4em;color:#fff;">
+            <i class="fa-solid fa-id-card"></i>
+        </div>
+        <div class="main-title" id="tituloBienvenida"><script>document.write(t('id_digital_local'))</script></div>
+        <div class="main-desc" id="descBienvenida"><script>document.write(t('desc_bienvenida'))</script></div>
+        <button class="main-btn" onclick="window.location.href='ID.html'">
+            <i class="fa-solid fa-arrow-right"></i> <span id="txtEmpezar"><script>document.write(t('empezar'))</script></span>
+        </button>
+        <select id="selectorIdioma" style="margin-top:18px;padding:4px 8px;border-radius:6px;width:120px;">
+            <option value="es">ES</option>
+            <option value="en">EN</option>
+            <option value="fr">FR</option>
+        </select>
     </div>
+        <script>
+                        // Botón de cargar datos de ejemplo eliminado
+                // Mostrar modal de sugerencia de instalación si es posible
+                let deferredPromptModal;
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPromptModal = e;
+                    setTimeout(() => {
+                        document.getElementById('modalInstalar').style.display = 'flex';
+                    }, 600);
+                });
+                document.getElementById('modalBtnInstalar').onclick = function() {
+                    if (deferredPromptModal) {
+                        deferredPromptModal.prompt();
+                        deferredPromptModal.userChoice.then(() => {
+                            deferredPromptModal = null;
+                            document.getElementById('modalInstalar').style.display = 'none';
+                        });
+                    }
+                };
+                document.getElementById('modalBtnCerrar').onclick = function() {
+                    // (El evento se reasigna dinámicamente al abrir el modal)
+                };
+        // Registrar service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+        </script>
+        <script src="lang.js"></script>
+            <script>
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('btnInstalarApp').style.display = 'flex';
+            });
+            document.getElementById('btnInstalarApp').onclick = function() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        deferredPrompt = null;
+                        document.getElementById('btnInstalarApp').style.display = 'none';
+                    });
+                }
+            };
+            </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+                        function traducirBienvenida() {
+                                                                                                var btnInstrucciones = document.getElementById('btnVerInstrucciones');
+                                                                                                if(btnInstrucciones) {
+                                                                                                    btnInstrucciones.textContent = {
+                                                                                                        es: '¿Cómo crear acceso directo?',
+                                                                                                        en: 'How to create shortcut?',
+                                                                                                        fr: 'Comment créer un raccourci ?'
+                                                                                                    }[getLang()];
+                                                                                                }
+                                                                                                var pasos = document.getElementById('pasosShortcut');
+                                                                                                if(pasos) pasos.style.display = 'none';
+                                                                                // Mostrar instrucciones paso a paso al pulsar el botón
+                                                                                document.getElementById('btnVerInstrucciones').onclick = function() {
+                                                                                    var pasos = document.getElementById('pasosShortcut');
+                                                                                    var idioma = getLang();
+                                                                                    var textos = {
+                                                                                        es: '<b>Windows:</b><br>1. Instala la app.<br>2. Abre el menú de inicio, busca "ID Digital Local".<br>3. Haz clic derecho y elige "Anclar a la barra de tareas" o "Anclar al escritorio".<br><br><b>Android:</b><br>1. Instala la app.<br>2. El acceso directo aparecerá automáticamente en la pantalla de inicio.<br><br><b>iPhone/iPad:</b><br>1. Abre Safari.<br>2. Toca el botón de compartir.<br>3. Selecciona "Agregar a pantalla de inicio".',
+                                                                                        en: '<b>Windows:</b><br>1. Install the app.<br>2. Open the start menu, search for "ID Digital Local".<br>3. Right-click and choose "Pin to taskbar" or "Pin to desktop".<br><br><b>Android:</b><br>1. Install the app.<br>2. The shortcut will appear automatically on the home screen.<br><br><b>iPhone/iPad:</b><br>1. Open Safari.<br>2. Tap the share button.<br>3. Select "Add to Home Screen".',
+                                                                                        fr: '<b>Windows :</b><br>1. Installez l’application.<br>2. Ouvrez le menu démarrer, cherchez "ID Digital Local".<br>3. Faites un clic droit et choisissez "Épingler à la barre des tâches" ou "Épingler au bureau".<br><br><b>Android :</b><br>1. Installez l’application.<br>2. Le raccourci apparaîtra automatiquement sur l’écran d’accueil.<br><br><b>iPhone/iPad :</b><br>1. Ouvrez Safari.<br>2. Touchez le bouton de partage.<br>3. Sélectionnez "Ajouter à l’écran d’accueil".'
+                                                                                    };
+                                                                                    pasos.innerHTML = textos[idioma];
+                                                                                    pasos.style.display = 'block';
+                                                                                };
+                                                                var msgShortcut = document.getElementById('modalMsgShortcut');
+                                                                if(msgShortcut) {
+                                                                    let instrucciones = {
+                                                                        es: 'Después de instalar, busca la app en tu menú de aplicaciones. En Windows puedes anclarla al escritorio desde el menú de inicio. En Android aparecerá en la pantalla de inicio. En iPhone, usa Safari y selecciona “Agregar a pantalla de inicio” en el menú de compartir.',
+                                                                        en: 'After installing, find the app in your apps menu. On Windows you can pin it to the desktop from the start menu. On Android it will appear on the home screen. On iPhone, use Safari and select “Add to Home Screen” from the share menu.',
+                                                                        fr: 'Après l’installation, trouvez l’application dans votre menu d’applications. Sous Windows, vous pouvez l’épingler au bureau depuis le menu démarrer. Sur Android, elle apparaîtra sur l’écran d’accueil. Sur iPhone, utilisez Safari et sélectionnez « Ajouter à l’écran d’accueil » dans le menu de partage.'
+                                                                    };
+                                                                    msgShortcut.textContent = instrucciones[getLang()];
+                                                                    msgShortcut.style.display = 'block';
+                                                                }
+                                document.getElementById('tituloBienvenida').textContent = t('bienvenido');
+                                document.getElementById('descBienvenida').textContent = {
+                                        es: 'Gestiona y comparte tu identidad digital y contactos de forma fácil, rápida y segura desde tu móvil o PC.',
+                                        en: 'Manage and share your digital identity and contacts easily, quickly and securely from your mobile or PC.',
+                                        fr: 'Gérez et partagez votre identité numérique et vos contacts facilement, rapidement et en toute sécurité depuis votre mobile ou PC.'
+                                }[getLang()];
+                                document.getElementById('txtEmpezar').textContent = t('empezar');
+                                document.getElementById('txtInstalar').textContent = {
+                                        es: 'Instalar app',
+                                        en: 'Install app',
+                                        fr: 'Installer l\'app'
+                                }[getLang()];
+                                // Asegura que el botón de instalación también se traduzca si está visible
+                                var btnInstalarApp = document.getElementById('btnInstalarApp');
+                                var spanTxtInstalar = document.getElementById('txtInstalar');
+                                if(btnInstalarApp && spanTxtInstalar) {
+                                    spanTxtInstalar.textContent = {
+                                        es: 'Instalar app',
+                                        en: 'Install app',
+                                        fr: 'Installer l\'app'
+                                    }[getLang()];
+                                }
+                                var btnModal = document.getElementById('modalBtnInstalar');
+                                if(btnModal) {
+                                    btnModal.textContent = {
+                                        es: 'Instalar app',
+                                        en: 'Install app',
+                                        fr: 'Installer l\'app'
+                                    }[getLang()];
+                                }
+                                // Botón de cargar datos de ejemplo eliminado
+                                var msgModal = document.getElementById('modalMsgInstalar');
+                                if(msgModal) {
+                                    msgModal.textContent = {
+                                        es: '¿Quieres instalar esta app en tu dispositivo para acceder más rápido y sin conexión?',
+                                        en: 'Do you want to install this app on your device for faster and offline access?',
+                                        fr: 'Voulez-vous installer cette application sur votre appareil pour un accès plus rapide et hors ligne ?'
+                                    }[getLang()];
+                                }
+                                var btnCerrar = document.getElementById('modalBtnCerrar');
+                                if(btnCerrar) {
+                                    btnCerrar.textContent = {
+                                        es: 'Cerrar',
+                                        en: 'Close',
+                                        fr: 'Fermer'
+                                    }[getLang()];
+                                }
+                        }
+            traducirBienvenida();
+            const selector = document.getElementById('selectorIdioma');
+            selector.value = getLang();
+            selector.onchange = function() {
+                setLang(this.value);
+                setTimeout(traducirBienvenida, 100); // Forzar traducción tras reload o cambio
+            };
+        });
+    </script>
+</div>
+<script>
+    document.querySelector('.main-btn').onclick = function() {
+        let data = localStorage.getItem('profileData');
+        let isEmpty = true;
+        if (data) {
+            try {
+                let obj = JSON.parse(data);
+                // Considera lleno si tiene nombre y empresa
+                if ((obj && (obj.nombre || obj.empresa))) {
+                    isEmpty = false;
+                }
+            } catch(e) {}
+        }
+        if (isEmpty) {
+            window.location.href = 'Formulario de perfil.html';
+        } else {
+            window.location.href = 'ID.html';
+        }
+    };
+</script>
 </body>
 </html>
+

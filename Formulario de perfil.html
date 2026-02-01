@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil y Redes</title>
+    <title><script>document.write(t('perfil_y_redes'))</script></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -61,7 +61,7 @@
               font-size: 1em;
               box-sizing: border-box;
         }
-        button[type="submit"], #btnEjemplo {
+        button[type="submit"] {
             background: #25D366;
             color: #fff;
             border: none;
@@ -76,7 +76,7 @@
             margin-bottom: 8px;
             transition: background 0.2s;
         }
-        button[type="submit"]:hover, #btnEjemplo:hover {
+        button[type="submit"]:hover {
             background: #2176d2;
         }
         .profile-preview-container {
@@ -110,45 +110,109 @@
             <img id="empresaLogoImg" src="#" alt="Logo Empresa" style="display:none;max-height:48px;max-width:80px;border-radius:8px;background:#fff;"/>
             <span id="empresaNombrePreview" style="font-size:1.3em;font-weight:bold;"></span>
         </div>
-        <h2 style="margin-top:0;">Perfil</h2>
+        <h2 style="margin-top:0;"><script>document.write(t('perfil'))</script></h2>
         <div class="profile-preview-container" style="margin-bottom:18px;">
             <img id="profilePreview" src="#" alt="Previsualización" style="display:none; max-width:120px; border-radius:10px;"/>
         </div>
         <form id="profileForm">
-            <label for="profileEmpresa">Empresa:</label><br>
+            <label for="profileEmpresa"><script>document.write(t('empresa'))</script>:</label><br>
             <input type="text" id="profileEmpresa" name="profileEmpresa"><br><br>
-            <label for="profileLogo">Logo de la empresa (JPG, PNG):</label><br>
+            <div class="desc-campo"><small id="desc_empresa"></small></div>
+            <label for="profileLogo"><script>document.write(t('logo_empresa'))</script>:</label><br>
             <input type="file" id="profileLogo" name="profileLogo" accept="image/jpeg, image/png"><br><br>
-            <button type="button" id="btnEjemplo" style="margin-bottom:15px;">Cargar datos de ejemplo</button>
-            <label for="profileFoto">Foto de perfil (JPG, PNG):</label><br>
+            <div class="desc-campo"><small id="desc_logo_empresa"></small></div>
+            <!-- Botón de cargar datos de ejemplo eliminado -->
+            <label for="profileFoto"><script>document.write(t('foto_perfil'))</script>:</label><br>
             <input type="file" id="profileFoto" name="profileFoto" accept="image/jpeg, image/png"><br><br>
+            <div class="desc-campo"><small id="desc_foto_perfil"></small></div>
 
-            <label for="profileNombre">Nombre completo:</label><br>
+            <label for="profileNombre"><script>document.write(t('nombre_completo'))</script>:</label><br>
             <input type="text" id="profileNombre" name="profileNombre" required><br><br>
+            <div class="desc-campo"><small id="desc_nombre_completo"></small></div>
 
-            <label for="profileCargo">Cargo:</label><br>
+            <label for="profileCargo"><script>document.write(t('cargo'))</script>:</label><br>
             <input type="text" id="profileCargo" name="profileCargo" required><br><br>
+            <div class="desc-campo"><small id="desc_cargo"></small></div>
 
-            <h3>Redes</h3>
-            <label for="profileWhatsapp">Whatsapp:</label><br>
+            <label for="profileNacimiento" id="labelNacimiento"><script>document.write(t('fecha_nacimiento'))</script>:</label><br>
+            <input type="date" id="profileNacimiento" name="profileNacimiento"><br><br>
+            <div class="desc-campo"><small id="desc_nacimiento"></small></div>
+
+            <h3><script>document.write(t('redes'))</script></h3>
+            <label for="profileWhatsapp"><script>document.write(t('whatsapp'))</script>:</label><br>
             <input type="text" id="profileWhatsapp" name="profileWhatsapp"><br><br>
+            <div class="desc-campo"><small id="desc_whatsapp"></small></div>
 
-            <label for="profileTelefono">Teléfono:</label><br>
+            <label for="profileTelefono"><script>document.write(t('telefono'))</script>:</label><br>
             <input type="tel" id="profileTelefono" name="profileTelefono"><br><br>
+            <div class="desc-campo"><small id="desc_telefono"></small></div>
 
-            <label for="profileEmail">Email:</label><br>
+            <label for="profileEmail"><script>document.write(t('email'))</script>:</label><br>
             <input type="email" id="profileEmail" name="profileEmail"><br><br>
+            <div class="desc-campo"><small id="desc_email"></small></div>
 
-            <label for="profileFacebook">Facebook:</label><br>
+            <label for="profileFacebook"><script>document.write(t('facebook'))</script>:</label><br>
             <input type="text" id="profileFacebook" name="profileFacebook"><br><br>
+            <div class="desc-campo"><small id="desc_facebook"></small></div>
 
-            <label for="profileInstagram">Instagram:</label><br>
+            <label for="profileInstagram"><script>document.write(t('instagram'))</script>:</label><br>
             <input type="text" id="profileInstagram" name="profileInstagram"><br><br>
+            <div class="desc-campo"><small id="desc_instagram"></small></div>
 
-            <label for="profileLinkedin">LinkedIn:</label><br>
+            <label for="profileLinkedin"><script>document.write(t('linkedin'))</script>:</label><br>
             <input type="text" id="profileLinkedin" name="profileLinkedin"><br><br>
+            <div class="desc-campo"><small id="desc_linkedin"></small></div>
 
-            <button type="submit">Guardar</button>
+            <button type="submit"><script>document.write(t('guardar'))</script></button>
+
+    </form>
+
+    <script src="lang.js"></script>
+    <script>
+    function traducirFormularioPerfil() {
+        if(window.t) {
+            // Labels
+            document.querySelector('h2').textContent = t('perfil');
+            document.querySelector('label[for="profileEmpresa"]').textContent = t('empresa')+':';
+            document.querySelector('label[for="profileLogo"]').textContent = t('logo_empresa')+':';
+            document.querySelector('label[for="profileFoto"]').textContent = t('foto_perfil')+':';
+            document.querySelector('label[for="profileNombre"]').textContent = t('nombre_completo')+':';
+            document.querySelector('label[for="profileCargo"]').textContent = t('cargo')+':';
+            document.getElementById('labelNacimiento').textContent = t('fecha_nacimiento')+':';
+            document.querySelector('h3').textContent = t('redes');
+            document.querySelector('label[for="profileWhatsapp"]').textContent = t('whatsapp')+':';
+            document.querySelector('label[for="profileTelefono"]').textContent = t('telefono')+':';
+            document.querySelector('label[for="profileEmail"]').textContent = t('email')+':';
+            document.querySelector('label[for="profileFacebook"]').textContent = t('facebook')+':';
+            document.querySelector('label[for="profileInstagram"]').textContent = t('instagram')+':';
+            document.querySelector('label[for="profileLinkedin"]').textContent = t('linkedin')+':';
+            document.querySelector('button[type="submit"]').textContent = t('guardar');
+            // Descripciones
+            const map = {
+                desc_empresa: 'empresa_desc',
+                desc_logo_empresa: 'logo_empresa_desc',
+                desc_foto_perfil: 'foto_perfil_desc',
+                desc_nombre_completo: 'nombre_completo_desc',
+                desc_cargo: 'cargo_desc',
+                desc_nacimiento: 'fecha_nacimiento_desc',
+                desc_whatsapp: 'whatsapp_desc',
+                desc_telefono: 'telefono_desc',
+                desc_email: 'email_desc',
+                desc_facebook: 'facebook_desc',
+                desc_instagram: 'instagram_desc',
+                desc_linkedin: 'linkedin_desc'
+            };
+            for(const id in map) {
+                const el = document.getElementById(id);
+                if(el) el.textContent = t(map[id]);
+            }
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        traducirFormularioPerfil();
+        // Ya no hay selector de idioma, se usa el idioma global
+    });
+    </script>
         </form>
     </div>
     <script>
@@ -168,6 +232,7 @@
                             }
                             if(data.nombre) document.getElementById('profileNombre').value = data.nombre;
                             if(data.cargo) document.getElementById('profileCargo').value = data.cargo;
+                            if(data.nacimiento) document.getElementById('profileNacimiento').value = data.nacimiento;
                             if(data.foto) {
                                 const preview = document.getElementById('profilePreview');
                                 preview.src = data.foto;
@@ -219,30 +284,7 @@
                     logoImg.removeAttribute('data-img');
                 }
             });
-        document.getElementById('btnEjemplo').addEventListener('click', function() {
-            document.getElementById('profileEmpresa').value = 'Creativa Studio';
-            document.getElementById('empresaNombrePreview').textContent = 'Creativa Studio';
-            // Logo de ejemplo
-            const ejemploLogo = 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
-            const logoImg = document.getElementById('empresaLogoImg');
-            logoImg.src = ejemploLogo;
-            logoImg.style.display = 'block';
-            logoImg.setAttribute('data-img', ejemploLogo);
-            document.getElementById('profileNombre').value = 'Ana Torres';
-            document.getElementById('profileCargo').value = 'Diseñadora Gráfica';
-            document.getElementById('profileWhatsapp').value = '51987654321';
-            document.getElementById('profileTelefono').value = '987654321';
-            document.getElementById('profileEmail').value = 'ana.torres@email.com';
-            document.getElementById('profileFacebook').value = 'https://facebook.com/anatorres';
-            document.getElementById('profileInstagram').value = 'https://instagram.com/anatorres';
-            document.getElementById('profileLinkedin').value = 'https://linkedin.com/in/anatorres';
-            // Imagen de ejemplo (base64 pequeña)
-            const ejemploImg = 'https://randomuser.me/api/portraits/women/44.jpg';
-            const preview = document.getElementById('profilePreview');
-            preview.src = ejemploImg;
-            preview.style.display = 'block';
-            preview.setAttribute('data-img', ejemploImg);
-        });
+        // Botón de cargar datos de ejemplo eliminado
     document.getElementById('profileFoto').addEventListener('change', function(event) {
         const file = event.target.files[0];
         const preview = document.getElementById('profilePreview');
@@ -283,6 +325,7 @@
         const logo = document.getElementById('empresaLogoImg').getAttribute('data-img') || '';
         const nombre = document.getElementById('profileNombre').value;
         const cargo = document.getElementById('profileCargo').value;
+        const nacimiento = document.getElementById('profileNacimiento').value;
         const whatsapp = document.getElementById('profileWhatsapp').value;
         const telefono = document.getElementById('profileTelefono').value;
         const email = document.getElementById('profileEmail').value;
@@ -291,10 +334,11 @@
         const linkedin = document.getElementById('profileLinkedin').value;
         const foto = document.getElementById('profilePreview').getAttribute('data-img') || '';
         const idUnico = 'ID-' + Date.now() + '-' + Math.floor(Math.random()*10000);
-        const data = { empresa, logo, nombre, cargo, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
+        const data = { empresa, logo, nombre, cargo, nacimiento, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
         localStorage.setItem('profileData', JSON.stringify(data));
         window.location.href = 'ID.html';
     });
-    </script>
+
+</script>
 </body>
 </html>

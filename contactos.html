@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Contactos</title>
+    <title><script>document.write(t('lista_contactos'))</script></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -19,15 +19,17 @@
             align-items: center;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        .contact-list {
-              max-width: 370px;
+          .contact-list {
+              max-width: 540px;
+              width: 98vw;
               margin: 40px auto;
               background: #fff;
-              border-radius: 18px;
-              box-shadow: 0 4px 24px #0002;
-              padding: 24px 12px 18px 12px;
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              box-shadow: none;
+              padding: 18px 14px 14px 14px;
               box-sizing: border-box;
-        }
+          }
         .contact-item {
               display: flex;
               align-items: center;
@@ -81,18 +83,38 @@
 </head>
 <body>
     <div style="display:flex;align-items:center;gap:12px;max-width:600px;margin:24px auto 0 auto;">
-        <button id="btnHome" title="Inicio" style="background:#2176d2;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-house"></i></button>
-        <h2 style="margin:0;" id="tituloContactos">Lista de Contactos</h2>
-        <select id="selectorIdioma" style="margin-left:10px;padding:4px 8px;border-radius:6px;">
-            <option value="es">ES</option>
-            <option value="en">EN</option>
-            <option value="fr">FR</option>
-        </select>
+        <button id="btnHome" style="background:#2176d2;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-house"></i></button>
+        <h2 style="margin:0;" id="tituloContactos"><script>document.write(t('lista_contactos'))</script></h2>
+
     </div>
     <div class="contact-list">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-            <button id="btnImportarContactos" title="Importar contactos del teléfono" style="background:#25D366;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-address-book"></i></button>
-            <button id="btnNuevoContacto" title="Nuevo contacto" style="background:#2176d2;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-user-plus"></i> <span id="txtNuevoContacto">Nuevo contacto</span></button>
+            <div style="margin:18px 0 10px 0;display:flex;align-items:center;gap:8px;">
+                <input id="filtroContacto" type="text" style="width:100%;max-width:260px;padding:7px 12px;border-radius:8px;border:1px solid #bbb;font-size:1em;">
+                <script>
+                // Traducir placeholder de búsqueda
+                document.addEventListener('DOMContentLoaded', function() {
+                    var filtro = document.getElementById('filtroContacto');
+                    if(filtro && typeof t === 'function') {
+                        filtro.placeholder = t('buscar_contacto');
+                    }
+                });
+                </script>
+            </div>
+            <button id="btnImportarContactos" style="background:#25D366;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-address-book"></i></button>
+            <button id="btnScanQR" style="background:#25D366;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-qrcode"></i></button>
+            <button id="btnExportarCSV" style="background:#2176d2;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-file-csv"></i></button>
+            <button id="btnNuevoContacto" style="background:#2176d2;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-user-plus"></i></button>
+            <!-- Modal para escanear QR -->
+            <div id="modalScanQR" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0008;z-index:1200;align-items:center;justify-content:center;">
+                <div style="background:#fff;padding:24px 12px 18px 12px;border-radius:14px;max-width:420px;width:95vw;max-height:95vh;overflow:auto;position:relative;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;">
+                    <button id="cerrarModalScanQR" style="position:absolute;top:10px;right:10px;background:#e53935;color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:1.2em;cursor:pointer;">&times;</button>
+                    <h3><script>document.write(t('escanear_qr_contacto'))</script></h3>
+                    <video id="videoQR" style="width:260px;height:200px;border-radius:10px;background:#222;" autoplay></video>
+                    <canvas id="canvasQR" style="display:none;"></canvas>
+                    <div id="qrStatus" style="margin-top:10px;color:#2176d2;font-weight:bold;"></div>
+                </div>
+            </div>
         </div>
         <div id="contactsContainer"></div>
     </div>
@@ -103,29 +125,189 @@
             <div id="contenidoModalVerContacto"></div>
         </div>
     </div>
-    <!-- Modal para nuevo contacto -->
-    <div id="modalNuevoContacto" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0008;z-index:1000;align-items:center;justify-content:center;">
-        <div style="background:#fff;padding:32px 18px 18px 18px;border-radius:14px;max-width:420px;width:95vw;max-height:95vh;overflow:auto;position:relative;box-sizing:border-box;">
-            <button id="cerrarModalNuevoContacto" style="position:absolute;top:10px;right:10px;background:#e53935;color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:1.2em;cursor:pointer;">&times;</button>
-            <div id="contenidoModalNuevoContacto"></div>
+    <!-- Modal elegante de confirmación para eliminar contacto -->
+    <div id="modalConfirmarEliminar" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:2000;align-items:center;justify-content:center;">
+        <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:center;position:relative;">
+            <div style="font-size:2.5em;color:#e53935;margin-bottom:10px;"><i class='fa-solid fa-triangle-exclamation'></i></div>
+            <div id="msgConfirmarEliminar" style="font-size:1.15em;margin-bottom:22px;">¿Seguro que deseas eliminar este contacto?</div>
+            <button id="btnConfirmarEliminar" style="background:#e53935;color:#fff;padding:10px 28px;border:none;border-radius:8px;font-size:1em;margin-right:10px;cursor:pointer;"></button>
+            <button id="btnCancelarEliminar" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;"></button>
         </div>
     </div>
-    <script src="lang.js"></script>
+        <script src="lang.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+        <!-- Modal de cumpleaños -->
+        <div id="modalCumple" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:3000;align-items:center;justify-content:center;">
+            <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:center;position:relative;">
+                <div style="font-size:2.5em;color:#25D366;margin-bottom:10px;"><i class='fa-solid fa-cake-candles'></i></div>
+                <div id="msgCumple" style="font-size:1.15em;margin-bottom:22px;"></div>
+                <div id="accionesCumple"></div>
+                <button id="cerrarModalCumple" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;margin-top:18px;">Cerrar</button>
+            </div>
+        </div>
     <script>
+    // Notificación de cumpleaños al cargar la app
+    document.addEventListener('DOMContentLoaded', function() {
+        const contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+        const hoy = new Date();
+        const hoyMesDia = (hoy.getMonth()+1).toString().padStart(2,'0') + '-' + hoy.getDate().toString().padStart(2,'0');
+        let cumpleaneros = contactos.filter(c => c.nacimiento && c.nacimiento.slice(5) === hoyMesDia);
+        if(cumpleaneros.length > 0) {
+            let nombres = cumpleaneros.map(c => c.nombre || t('contacto')).join(', ');
+            // Modal moderno
+            document.getElementById('msgCumple').innerHTML = `<b>🎉 ${t('feliz_cumple')}:</b><br>${nombres}`;
+            let acciones = '';
+            cumpleaneros.forEach(c => {
+                if(c.whatsapp) {
+                    let msg = encodeURIComponent(`¡${t('feliz_cumple')} ${c.nombre || ''}!`);
+                    let num = c.whatsapp.replace(/[^0-9]/g, '');
+                    acciones += `<a href='https://wa.me/${num}?text=${msg}' target='_blank' style='background:#25D366;color:#fff;padding:8px 16px;border-radius:8px;margin:4px 2px;display:inline-block;text-decoration:none;font-weight:bold;'><i class='fa-brands fa-whatsapp'></i> WhatsApp ${c.nombre||''}</a>`;
+                }
+                if(c.email) {
+                    let subject = encodeURIComponent(t('feliz_cumple'));
+                    let body = encodeURIComponent(`¡${t('feliz_cumple')} ${c.nombre || ''}!`);
+                    acciones += `<a href='mailto:${c.email}?subject=${subject}&body=${body}' style='background:#2176d2;color:#fff;padding:8px 16px;border-radius:8px;margin:4px 2px;display:inline-block;text-decoration:none;font-weight:bold;'><i class='fa-solid fa-envelope'></i> Email ${c.nombre||''}</a>`;
+                }
+            });
+            document.getElementById('accionesCumple').innerHTML = acciones;
+            document.getElementById('modalCumple').style.display = 'flex';
+            document.getElementById('cerrarModalCumple').onclick = function() {
+                document.getElementById('modalCumple').style.display = 'none';
+            };
+        }
+    });
+    </script>
+    <script>
+    // Asegurar que el botón de casa funcione siempre
+    document.addEventListener('DOMContentLoaded', function() {
+        var btnHome = document.getElementById('btnHome');
+        if(btnHome) {
+            btnHome.addEventListener('click', function() {
+                window.location.href = 'ID.html';
+            });
+        }
+    });
+                        // Escaneo de QR para agregar contacto
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const btnScanQR = document.getElementById('btnScanQR');
+                            const modalScanQR = document.getElementById('modalScanQR');
+                            const cerrarModalScanQR = document.getElementById('cerrarModalScanQR');
+                            const videoQR = document.getElementById('videoQR');
+                            const canvasQR = document.getElementById('canvasQR');
+                            const qrStatus = document.getElementById('qrStatus');
+                            let stream = null;
+                            let scanning = false;
+                            function stopScan() {
+                                scanning = false;
+                                if (stream) {
+                                    stream.getTracks().forEach(track => track.stop());
+                                    stream = null;
+                                }
+                                videoQR.srcObject = null;
+                            }
+                            btnScanQR.onclick = async function() {
+                                modalScanQR.style.display = 'flex';
+                                qrStatus.textContent = 'Apunta la cámara al QR...';
+                                try {
+                                    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                                    videoQR.srcObject = stream;
+                                    scanning = true;
+                                    scanLoop();
+                                } catch (e) {
+                                    qrStatus.textContent = 'No se pudo acceder a la cámara.';
+                                }
+                            };
+                            cerrarModalScanQR.onclick = function() {
+                                modalScanQR.style.display = 'none';
+                                stopScan();
+                            };
+                            function parseVCard(vcard) {
+                                // Simple parser para vCard 3.0
+                                const obj = {};
+                                vcard.split(/\r?\n/).forEach(line => {
+                                    if(line.startsWith('FN:')) obj.nombre = line.substring(3);
+                                    if(line.startsWith('ORG:')) obj.empresa = line.substring(4);
+                                    if(line.startsWith('TITLE:')) obj.cargo = line.substring(6);
+                                    if(line.startsWith('TEL')) obj.telefono = line.split(':')[1];
+                                    if(line.startsWith('EMAIL')) obj.email = line.split(':')[1];
+                                });
+                                obj.idUnico = 'ID-' + Date.now() + '-' + Math.floor(Math.random()*10000);
+                                return obj;
+                            }
+                            function scanLoop() {
+                                if (!scanning) return;
+                                if (videoQR.readyState === videoQR.HAVE_ENOUGH_DATA) {
+                                    canvasQR.width = videoQR.videoWidth;
+                                    canvasQR.height = videoQR.videoHeight;
+                                    const ctx = canvasQR.getContext('2d');
+                                    ctx.drawImage(videoQR, 0, 0, canvasQR.width, canvasQR.height);
+                                    const imageData = ctx.getImageData(0, 0, canvasQR.width, canvasQR.height);
+                                    const code = jsQR(imageData.data, canvasQR.width, canvasQR.height);
+                                    if (code && code.data) {
+                                        scanning = false;
+                                        stopScan();
+                                        qrStatus.textContent = 'QR detectado. Procesando...';
+                                        // Procesar vCard
+                                        if(code.data.includes('BEGIN:VCARD')) {
+                                            const contacto = parseVCard(code.data);
+                                            let contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                                            contactos.push(contacto);
+                                            localStorage.setItem('contactos', JSON.stringify(contactos));
+                                            qrStatus.textContent = '¡Contacto agregado!';
+                                            if(typeof renderContacts === 'function') renderContacts();
+                                            setTimeout(()=>{modalScanQR.style.display='none';}, 1200);
+                                        } else {
+                                            qrStatus.textContent = 'El QR no contiene un contacto válido.';
+                                        }
+                                        return;
+                                    }
+                                }
+                                requestAnimationFrame(scanLoop);
+                            }
+                        });
+                // Exportar contactos a CSV
+                document.addEventListener('DOMContentLoaded', function() {
+                    var btnExportar = document.getElementById('btnExportarCSV');
+                    if(btnExportar) {
+                        btnExportar.onclick = function() {
+                            const contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                            if(contactos.length === 0) {
+                                alert('No hay contactos para exportar.');
+                                return;
+                            }
+                            // Encabezados
+                            const headers = ['empresa','logo','nombre','cargo','whatsapp','telefono','email','facebook','instagram','linkedin','foto','idUnico'];
+                            const csvRows = [headers.join(',')];
+                            contactos.forEach(c => {
+                                const row = headers.map(h => '"' + String(c[h]||'').replace(/"/g,'""') + '"').join(',');
+                                csvRows.push(row);
+                            });
+                            const csvContent = csvRows.join('\r\n');
+                            const blob = new Blob([csvContent], {type: 'text/csv'});
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'contactos.csv';
+                            document.body.appendChild(a);
+                            a.click();
+                            setTimeout(() => {
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                            }, 100);
+                        }
+                    }
+                });
         document.addEventListener('DOMContentLoaded', function() {
             function traducirContactos() {
                 document.getElementById('tituloContactos').textContent = t('contactos');
-                document.getElementById('txtNuevoContacto').textContent = t('nuevoContacto');
-                document.getElementById('btnImportarContactos').title = t('importar') || 'Importar contactos del teléfono';
-                document.getElementById('btnNuevoContacto').title = t('nuevoContacto');
+                // Descripciones dinámicas de los iconos/botones
                 document.getElementById('btnHome').title = t('perfil');
+                document.getElementById('btnImportarContactos').title = t('importar_contactos') || t('importar');
+                document.getElementById('btnScanQR').title = t('escanear_qr');
+                document.getElementById('btnExportarCSV').title = t('exportar_csv');
+                document.getElementById('btnNuevoContacto').title = t('nuevo_contacto') || t('nuevoContacto');
             }
             traducirContactos();
-            const selector = document.getElementById('selectorIdioma');
-            selector.value = getLang();
-            selector.onchange = function() {
-                setLang(this.value);
-            };
             var btnHome = document.getElementById('btnHome');
             if(btnHome) {
                 btnHome.onclick = function() {
@@ -156,202 +338,14 @@
             }
         });
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('btnNuevoContacto').onclick = function() {
-            // Mostrar modal y cargar el formulario de nuevo contacto
-            const modal = document.getElementById('modalNuevoContacto');
-            const contenido = document.getElementById('contenidoModalNuevoContacto');
-            modal.style.display = 'flex';
-            // Cargar el formulario de nuevo-contacto.html dentro del modal
-            fetch('nuevo-contacto.html')
-                .then(r => r.text())
-                .then(html => {
-                    // Extraer solo el contenido del formulario
-                    const temp = document.createElement('div');
-                    temp.innerHTML = html;
-                    const form = temp.querySelector('.profile-container');
-                    if(form) {
-                        contenido.innerHTML = '';
-                        contenido.appendChild(form);
-                        // Agregar botón de ejemplo si no existe
-                        const formTag = form.querySelector('form');
-                        if (formTag && !form.querySelector('#btnEjemploNuevo')) {
-                            const btnEjemplo = document.createElement('button');
-                            btnEjemplo.type = 'button';
-                            btnEjemplo.id = 'btnEjemploNuevo';
-                            btnEjemplo.textContent = 'Ejemplo';
-                            btnEjemplo.style = 'background:#25D366;color:#fff;border:none;border-radius:8px;padding:9px 0;width:100%;font-size:1em;font-weight:bold;box-shadow:0 2px 8px #0001;cursor:pointer;margin-bottom:12px;';
-                            formTag.insertBefore(btnEjemplo, formTag.firstChild);
-                            btnEjemplo.onclick = function() {
-                                formTag.querySelector('#profileEmpresa').value = 'Ejemplo S.A.';
-                                formTag.querySelector('#profileEmpresa').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileNombre').value = 'Juan Ejemplo';
-                                formTag.querySelector('#profileNombre').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileCargo').value = 'Gerente';
-                                formTag.querySelector('#profileCargo').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileWhatsapp').value = '1234567890';
-                                formTag.querySelector('#profileWhatsapp').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileTelefono').value = '0987654321';
-                                formTag.querySelector('#profileTelefono').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileEmail').value = 'ejemplo@correo.com';
-                                formTag.querySelector('#profileEmail').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileFacebook').value = 'https://facebook.com/ejemplo';
-                                formTag.querySelector('#profileFacebook').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileInstagram').value = 'https://instagram.com/ejemplo';
-                                formTag.querySelector('#profileInstagram').dispatchEvent(new Event('input'));
-                                formTag.querySelector('#profileLinkedin').value = 'https://linkedin.com/in/ejemplo';
-                                formTag.querySelector('#profileLinkedin').dispatchEvent(new Event('input'));
-                                // Logo de ejemplo
-                                var logoImg = formTag.querySelector('#empresaLogoImg');
-                                if(logoImg) {
-                                    logoImg.src = 'https://ui-avatars.com/api/?name=Ejemplo+S.A.&background=25D366&color=fff';
-                                    logoImg.style.display = 'block';
-                                    logoImg.setAttribute('data-img', logoImg.src);
-                                    logoImg.dispatchEvent(new Event('change'));
-                                }
-                                // Foto de perfil de ejemplo
-                                var fotoImg = formTag.querySelector('#profilePreview');
-                                if(fotoImg) {
-                                    fotoImg.src = 'https://ui-avatars.com/api/?name=Juan+Ejemplo&background=2176d2&color=fff';
-                                    fotoImg.style.display = 'block';
-                                    fotoImg.setAttribute('data-img', fotoImg.src);
-                                    fotoImg.dispatchEvent(new Event('change'));
-                                }
-                            };
-                        }
-                        // Reasignar eventos del formulario (por seguridad)
-                        asignarEventosNuevoContacto();
-                        // Asignar el evento submit al formulario visible
-                        const formEl = contenido.querySelector('form');
-                        formEl.onsubmit = null;
-                        formEl.addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            // Obtener campos directamente sin mostrar mensaje
-                            const empresa = formEl.querySelector('#profileEmpresa')?.value || '';
-                            const logo = formEl.querySelector('#empresaLogoImg')?.getAttribute('data-img') || '';
-                            const nombre = formEl.querySelector('#profileNombre')?.value || '';
-                            const cargo = formEl.querySelector('#profileCargo')?.value || '';
-                            const whatsapp = formEl.querySelector('#profileWhatsapp')?.value || '';
-                            const telefono = formEl.querySelector('#profileTelefono')?.value || '';
-                            const email = formEl.querySelector('#profileEmail')?.value || '';
-                            const facebook = formEl.querySelector('#profileFacebook')?.value || '';
-                            const instagram = formEl.querySelector('#profileInstagram')?.value || '';
-                            const linkedin = formEl.querySelector('#profileLinkedin')?.value || '';
-                            const foto = formEl.querySelector('#profilePreview')?.getAttribute('data-img') || '';
-                            const idUnico = 'ID-' + Date.now() + '-' + Math.floor(Math.random()*10000);
-                            const data = { empresa, logo, nombre, cargo, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
-                            let contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
-                            contactos.push(data);
-                            localStorage.setItem('contactos', JSON.stringify(contactos));
-                            document.getElementById('modalNuevoContacto').style.display = 'none';
-                            document.getElementById('contenidoModalNuevoContacto').innerHTML = '';
-                            if(typeof renderContacts === 'function') renderContacts();
-                        });
-                    } else {
-                        contenido.innerHTML = '<p>Error al cargar el formulario. Asegúrate que nuevo-contacto.html contiene un elemento con la clase .profile-container.</p>';
-                    }
-                });
-        };
-        document.getElementById('cerrarModalNuevoContacto').onclick = function() {
-            document.getElementById('modalNuevoContacto').style.display = 'none';
-            document.getElementById('contenidoModalNuevoContacto').innerHTML = '';
-        };
-        function asignarEventosNuevoContacto() {
-            // Reasignar todos los listeners del formulario importado
-            const form = document.getElementById('contenidoModalNuevoContacto').querySelector('form');
-            if(!form) return;
-            // Corregir enlaces a perfil-redes.html si existen
-            const links = form.querySelectorAll('a[href="perfil-redes.html"]');
-            links.forEach(function(link) {
-                link.setAttribute('href', 'Formulario de perfil.html');
-            });
-            // Listeners de inputs y archivos
-            const empresaInput = form.querySelector('#profileEmpresa');
-            const empresaNombrePreview = form.querySelector('#empresaNombrePreview');
-            if(empresaInput && empresaNombrePreview) {
-                empresaInput.addEventListener('input', function(e) {
-                    empresaNombrePreview.textContent = e.target.value;
-                });
-            }
-            const logoInput = form.querySelector('#profileLogo');
-            const logoImg = form.querySelector('#empresaLogoImg');
-            if(logoInput && logoImg) {
-                logoInput.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            logoImg.src = e.target.result;
-                            logoImg.style.display = 'block';
-                            logoImg.setAttribute('data-img', e.target.result);
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        logoImg.src = '#';
-                        logoImg.style.display = 'none';
-                        logoImg.removeAttribute('data-img');
-                    }
-                });
-            }
-            const fotoInput = form.querySelector('#profileFoto');
-            const previewImg = form.querySelector('#profilePreview');
-            if(fotoInput && previewImg) {
-                fotoInput.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = new Image();
-                            img.onload = function() {
-                                const canvas = document.createElement('canvas');
-                                canvas.width = 80;
-                                canvas.height = 80;
-                                const ctx = canvas.getContext('2d');
-                                ctx.drawImage(img, 0, 0, 80, 80);
-                                let optimized;
-                                if (file.type === 'image/png') {
-                                    optimized = canvas.toDataURL('image/png', 0.7);
-                                } else {
-                                    optimized = canvas.toDataURL('image/jpeg', 0.5);
-                                }
-                                previewImg.src = optimized;
-                                previewImg.style.display = 'block';
-                                previewImg.setAttribute('data-img', optimized);
-                            };
-                            img.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        previewImg.src = '#';
-                        previewImg.style.display = 'none';
-                        previewImg.removeAttribute('data-img');
-                    }
-                });
-            }
-            // Submit: eliminar duplicados y asignar solo uno
-            form.onsubmit = null;
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const empresa = form.querySelector('#profileEmpresa').value;
-                const logo = form.querySelector('#empresaLogoImg').getAttribute('data-img') || '';
-                const nombre = form.querySelector('#profileNombre').value;
-                const cargo = form.querySelector('#profileCargo').value;
-                const whatsapp = form.querySelector('#profileWhatsapp').value;
-                const telefono = form.querySelector('#profileTelefono').value;
-                const email = form.querySelector('#profileEmail').value;
-                const facebook = form.querySelector('#profileFacebook').value;
-                const instagram = form.querySelector('#profileInstagram').value;
-                const linkedin = form.querySelector('#profileLinkedin').value;
-                const foto = form.querySelector('#profilePreview').getAttribute('data-img') || '';
-                const idUnico = 'ID-' + Date.now() + '-' + Math.floor(Math.random()*10000);
-                const data = { empresa, logo, nombre, cargo, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
-                let contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
-                contactos.push(data);
-                localStorage.setItem('contactos', JSON.stringify(contactos));
-                document.getElementById('modalNuevoContacto').style.display = 'none';
-                document.getElementById('contenidoModalNuevoContacto').innerHTML = '';
-                // Recargar lista de contactos si existe función
-                if(typeof renderContacts === 'function') renderContacts();
-            });
+        // Eliminar el modal de nuevo contacto y redirigir el botón
+        var modalNuevo = document.getElementById('modalNuevoContacto');
+        if(modalNuevo) modalNuevo.remove();
+        var btnNuevo = document.getElementById('btnNuevoContacto');
+        if(btnNuevo) {
+            btnNuevo.onclick = function() {
+                window.location.href = 'nuevo-contacto.html';
+            };
         }
     });
     // Obtener lista de contactos de localStorage
@@ -361,15 +355,24 @@
     function setContacts(list) {
         localStorage.setItem('contactos', JSON.stringify(list));
     }
-    function renderContacts() {
+    function renderContacts(filtro = '') {
         const contacts = getContacts();
         const container = document.getElementById('contactsContainer');
         container.innerHTML = '';
-            if (contacts.length === 0) {
-                container.innerHTML = '<p>No hay contactos guardados.</p>';
-                return;
+        let filtrados = contacts;
+        if (filtro && filtro.trim() !== '') {
+            const f = filtro.trim().toLowerCase();
+            filtrados = contacts.filter(c =>
+                (c.nombre && c.nombre.toLowerCase().includes(f)) ||
+                (c.empresa && c.empresa.toLowerCase().includes(f)) ||
+                (c.cargo && c.cargo.toLowerCase().includes(f))
+            );
         }
-        contacts.forEach((c, idx) => {
+        if (filtrados.length === 0) {
+            container.innerHTML = '<p>'+t('no_hay_contactos')+'</p>';
+            return;
+        }
+        filtrados.forEach((c, idx) => {
             const div = document.createElement('div');
             div.className = 'contact-item';
             div.innerHTML = `
@@ -378,116 +381,34 @@
                     <div class="contact-name">${c.nombre || ''}</div>
                     <div>${c.cargo || ''}</div>
                     <div style="font-size:0.95em;color:#888;">${c.empresa || ''}</div>
-                    <div style="font-size:0.85em;color:#aaa;">ID: ${c.idUnico || '(sin id)'}</div>
+                    <div style="font-size:0.85em;color:#aaa;display:flex;align-items:center;gap:8px;">
+                        ${c.idUnico ? `<span>ID: ${(String(c.idUnico).replace(/[^a-zA-Z0-9\-]/g, ''))}</span>` : ''}
+                        ${(c.email && c.email.length > 3) ? `<button title='Correo rápido' onclick='window.open("mailto:${c.email}?subject=Hola%20${encodeURIComponent(c.nombre||'')}&body=Hola%20${encodeURIComponent(c.nombre||'')},%20te%20escribo%20desde%20mi%20agenda%20digital.","_blank")' style='background:#FF9800;border:none;border-radius:50%;padding:6px 9px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px #0002;'><i class='fa-solid fa-envelope' style='color:#fff;font-size:1.1em;'></i></button>` : ''}
+                        ${(c.whatsapp && c.whatsapp.length > 3) ? `<button title='Mensaje rápido' onclick='window.open("https://wa.me/${c.whatsapp.replace(/[^0-9]/g,"")}?text=Hola%20${encodeURIComponent(c.nombre||'')}","_blank")' style='background:#25D366;border:none;border-radius:50%;padding:6px 9px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px #0002;'><i class='fa-brands fa-whatsapp' style='color:#fff;font-size:1.1em;'></i></button>` : ''}
+                    </div>
                 </div>
                 <div class="contact-actions">
-                    <button title="Ver" onclick="verContacto(${idx})" style="background:#2196F3;padding:8px 12px;border-radius:50%;font-size:1.1em;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-eye"></i></button>
-                        <button title="Modificar" onclick="modificarContacto(${idx})" style="background:#FFC107;color:#fff;padding:8px 12px;border-radius:50%;font-size:1.1em;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button title="Eliminar" class="delete" onclick="eliminarContacto(${idx})" style="background:#e53935;padding:8px 12px;border-radius:50%;font-size:1.1em;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-trash"></i></button>
+                    <button title="Ver" onclick="verContacto(${contacts.indexOf(c)})" style="background:#2196F3;padding:8px 12px;border-radius:50%;font-size:1.1em;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-eye"></i></button>
+                        <button title="Modificar" onclick="modificarContacto(${contacts.indexOf(c)})" style="background:#FFC107;color:#fff;padding:8px 12px;border-radius:50%;font-size:1.1em;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button title="Eliminar" class="delete" onclick="eliminarContacto(${contacts.indexOf(c)})" style="background:#e53935;padding:8px 12px;border-radius:50%;font-size:1.1em;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `;
             container.appendChild(div);
         });
     }
+        // Filtro de búsqueda de contactos
+        document.addEventListener('DOMContentLoaded', function() {
+            const filtroInput = document.getElementById('filtroContacto');
+            if(filtroInput) {
+                filtroInput.addEventListener('input', function() {
+                    renderContacts(this.value);
+                });
+            }
+        });
     window.modificarContacto = function(idx) {
-        const contactos = getContacts();
-        const c = contactos[idx];
-        const modal = document.getElementById('modalNuevoContacto');
-        const contenido = document.getElementById('contenidoModalNuevoContacto');
-        modal.style.display = 'flex';
-        fetch('nuevo-contacto.html')
-            .then(r => r.text())
-            .then(html => {
-                const temp = document.createElement('div');
-                temp.innerHTML = html;
-                const form = temp.querySelector('.profile-container');
-                if(form) {
-                    // Agregar botón de ejemplo si no existe
-                    const formTag = form.querySelector('form');
-                    if (formTag && !form.querySelector('#btnEjemploEdicion')) {
-                        const btnEjemplo = document.createElement('button');
-                        btnEjemplo.type = 'button';
-                        btnEjemplo.id = 'btnEjemploEdicion';
-                        btnEjemplo.textContent = 'Ejemplo';
-                        btnEjemplo.style = 'background:#25D366;color:#fff;border:none;border-radius:8px;padding:9px 0;width:100%;font-size:1em;font-weight:bold;box-shadow:0 2px 8px #0001;cursor:pointer;margin-bottom:12px;';
-                        formTag.insertBefore(btnEjemplo, formTag.firstChild);
-                        btnEjemplo.onclick = function() {
-                            formTag.querySelector('#profileEmpresa').value = 'Ejemplo S.A.';
-                            formTag.querySelector('#empresaNombrePreview').textContent = 'Ejemplo S.A.';
-                            formTag.querySelector('#profileNombre').value = 'Juan Ejemplo';
-                            formTag.querySelector('#profileCargo').value = 'Gerente';
-                            formTag.querySelector('#profileWhatsapp').value = '1234567890';
-                            formTag.querySelector('#profileTelefono').value = '0987654321';
-                            formTag.querySelector('#profileEmail').value = 'ejemplo@correo.com';
-                            formTag.querySelector('#profileFacebook').value = 'https://facebook.com/ejemplo';
-                            formTag.querySelector('#profileInstagram').value = 'https://instagram.com/ejemplo';
-                            formTag.querySelector('#profileLinkedin').value = 'https://linkedin.com/in/ejemplo';
-                        };
-                    }
-                    contenido.innerHTML = '';
-                    contenido.appendChild(form);
-                    // Rellenar datos y asignar submit después de rellenar
-                    setTimeout(function() {
-                        form.querySelector('#profileEmpresa').value = c.empresa || '';
-                        form.querySelector('#empresaNombrePreview').textContent = c.empresa || '';
-                        if(c.logo) {
-                            const logoImg = form.querySelector('#empresaLogoImg');
-                            logoImg.src = c.logo;
-                            logoImg.style.display = 'block';
-                            logoImg.setAttribute('data-img', c.logo);
-                        }
-                        form.querySelector('#profileNombre').value = c.nombre || '';
-                        form.querySelector('#profileCargo').value = c.cargo || '';
-                        if(c.foto) {
-                            const preview = form.querySelector('#profilePreview');
-                            preview.src = c.foto;
-                            preview.style.display = 'block';
-                            preview.setAttribute('data-img', c.foto);
-                        }
-                        form.querySelector('#profileWhatsapp').value = c.whatsapp || '';
-                        form.querySelector('#profileTelefono').value = c.telefono || '';
-                        form.querySelector('#profileEmail').value = c.email || '';
-                        form.querySelector('#profileFacebook').value = c.facebook || '';
-                        form.querySelector('#profileInstagram').value = c.instagram || '';
-                        form.querySelector('#profileLinkedin').value = c.linkedin || '';
-                        // Reasignar eventos y sobreescribir submit para modificar
-                        asignarEventosNuevoContacto();
-                        // Usar el formulario visible en el modal para guardar los datos correctos
-                        const formEl = document.getElementById('modalNuevoContacto').querySelector('form');
-                        // Eliminar cualquier submit anterior
-                        formEl.onsubmit = null;
-                        formEl.addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            const empresa = formEl.querySelector('#profileEmpresa').value;
-                            const logo = formEl.querySelector('#empresaLogoImg').getAttribute('data-img') || '';
-                            const nombre = formEl.querySelector('#profileNombre').value;
-                            const cargo = formEl.querySelector('#profileCargo').value;
-                            const whatsapp = formEl.querySelector('#profileWhatsapp').value;
-                            const telefono = formEl.querySelector('#profileTelefono').value;
-                            const email = formEl.querySelector('#profileEmail').value;
-                            const facebook = formEl.querySelector('#profileFacebook').value;
-                            const instagram = formEl.querySelector('#profileInstagram').value;
-                            const linkedin = formEl.querySelector('#profileLinkedin').value;
-                            const foto = formEl.querySelector('#profilePreview').getAttribute('data-img') || '';
-                            // Mantener el mismo idUnico
-                            const idUnico = c.idUnico;
-                            const data = { empresa, logo, nombre, cargo, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
-                            let contactosActuales = JSON.parse(localStorage.getItem('contactos') || '[]');
-                            // Buscar el contacto por idUnico y actualizarlo
-                            const idxReal = contactosActuales.findIndex(ct => ct.idUnico === idUnico);
-                            if (idxReal !== -1) {
-                                contactosActuales[idxReal] = data;
-                                localStorage.setItem('contactos', JSON.stringify(contactosActuales));
-                            }
-                            document.getElementById('modalNuevoContacto').style.display = 'none';
-                            document.getElementById('contenidoModalNuevoContacto').innerHTML = '';
-                            if(typeof renderContacts === 'function') renderContacts();
-                        });
-                    }, 150);
-                } else {
-                    contenido.innerHTML = '<p>Error al cargar el formulario.</p>';
-                }
-            });
+        // Guardar el índice del contacto a editar en localStorage
+        localStorage.setItem('editarContactoIdx', idx);
+        window.location.href = 'nuevo-contacto.html?edit=1';
     }
     window.verContacto = function(idx) {
         const contacts = getContacts();
@@ -511,25 +432,36 @@
             'END:VCARD'
         ].filter(Boolean).join('\n');
         const qrData = encodeURIComponent(vCard);
+        // Limpiar el ID de contacto de cualquier carácter no permitido (solo letras, números y guiones)
+        let idLimpio = c.idUnico ? String(c.idUnico).replace(/[^a-zA-Z0-9\-]/g, '') : t('sin_id');
         contenido.innerHTML = `
             <div style="display:flex;flex-direction:column;align-items:center;">
                 <img src="${c.foto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(c.nombre || 'C') + '&background=2176d2&color=fff'}" alt="Foto" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:12px;box-shadow:0 2px 8px #0002;">
                 <h3 style="margin-top:0;">${c.nombre || ''}</h3>
-                <div style=\"margin-bottom:10px;\"><strong>Empresa:</strong> ${c.empresa || ''}</div>
-                <div style=\"margin-bottom:10px;\"><strong>Cargo:</strong> ${c.cargo || ''}</div>
-                <div style=\"margin-bottom:10px;\">
-                    <strong>Teléfono:</strong> 
+                <div style="margin-bottom:10px;">
+                    <strong>${t('empresa')}:</strong> ${c.empresa || ''}</div>
+                <div style="margin-bottom:10px;">
+                    <strong>${t('cargo')}:</strong> ${c.cargo || ''}</div>
+                <div style="margin-bottom:10px;">
+                    <strong>${t('telefono')}:</strong> 
                     ${c.telefono ? `<a href='tel:${c.telefono}' style='color:#2196F3;text-decoration:none;font-size:1.2em;margin-left:6px;'><i class='fa-solid fa-phone'></i></a> <span style='font-size:0.98em;color:#444;margin-left:4px;'>${c.telefono}</span>` : ''}
                 </div>
-                <div style=\"margin-bottom:10px;\">
-                    <strong>Email:</strong> 
+                <div style="margin-bottom:10px;">
+                    <strong>${t('email')}:</strong> 
                     ${c.email ? `<a href='mailto:${c.email}' style='color:#FF9800;text-decoration:none;font-size:1.2em;margin-left:6px;'><i class='fa-solid fa-envelope'></i></a> <span style='font-size:0.98em;color:#444;margin-left:4px;'>${c.email}</span>` : ''}
                 </div>
-                <div style=\"margin-bottom:10px;\"><strong>ID:</strong> <span style='color:#2176d2;font-weight:bold;'>${c.idUnico || '(sin id)'}</span></div>
-                <div style=\"margin:18px 0 0 0;\"><img src='https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}' alt='QR ID' style='width:120px;height:120px;'></div>
+                <div style="margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+                    <span style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(90deg,#25D366 0%,#2176d2 100%);color:#fff;font-weight:600;padding:10px 22px 10px 14px;border-radius:24px;font-size:1.13em;box-shadow:0 4px 16px #2176d244,0 1.5px 6px #25D36633;border:2px solid #fff;outline:2px solid #2176d2;outline-offset:2px;transition:box-shadow 0.2s;">
+                        <i class="fa-solid fa-fingerprint" style="font-size:1.25em;color:#fff;text-shadow:0 2px 8px #2176d288;"></i>
+                        <span style="font-family:'Segoe UI',Arial,sans-serif;letter-spacing:0.7px;font-size:1.09em;filter:drop-shadow(0 1px 2px #0002);font-weight:500;">${idLimpio}</span>
+                    </span>
+                </div>
+                <div style="margin:18px 0 0 0;">
+                    <img src='https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}' alt='QR ID' style='width:120px;height:120px;'>
+                </div>
                 <div style="display:flex;gap:18px;margin-top:18px;">
-                    <button id="btnCompartirContacto" title="Compartir" style="background:#25D366;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-share-nodes"></i></button>
-                    <button id="btnCompartirSMS" title="Enviar por SMS" style="background:#2196F3;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-sms"></i></button>
+                    <button id="btnCompartirContacto" title="'+t('compartir')+'" style="background:#25D366;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-share-nodes"></i></button>
+                    <button id="btnCompartirSMS" title="'+t('enviar_sms')+'" style="background:#2196F3;color:#fff;padding:10px 14px;border:none;border-radius:50%;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-sms"></i></button>
                 </div>
             </div>
         `;
@@ -537,25 +469,25 @@
             const btnCompartir = document.getElementById('btnCompartirContacto');
             const btnSMS = document.getElementById('btnCompartirSMS');
             let texto = '';
-            if(c.nombre) texto += 'Nombre: ' + c.nombre + '\n';
-            if(c.empresa) texto += 'Empresa: ' + c.empresa + '\n';
-            if(c.cargo) texto += 'Cargo: ' + c.cargo + '\n';
-            if(c.telefono) texto += 'Teléfono: ' + c.telefono + '\n';
-            if(c.email) texto += 'Email: ' + c.email + '\n';
-            if(c.whatsapp) texto += 'Whatsapp: ' + c.whatsapp + '\n';
-            if(c.facebook) texto += 'Facebook: ' + c.facebook + '\n';
-            if(c.instagram) texto += 'Instagram: ' + c.instagram + '\n';
-            if(c.linkedin) texto += 'LinkedIn: ' + c.linkedin + '\n';
+            if(c.nombre) texto += t('nombre') + ': ' + c.nombre + '\n';
+            if(c.empresa) texto += t('empresa') + ': ' + c.empresa + '\n';
+            if(c.cargo) texto += t('cargo') + ': ' + c.cargo + '\n';
+            if(c.telefono) texto += t('telefono') + ': ' + c.telefono + '\n';
+            if(c.email) texto += t('email') + ': ' + c.email + '\n';
+            if(c.whatsapp) texto += t('whatsapp') + ': ' + c.whatsapp + '\n';
+            if(c.facebook) texto += t('facebook') + ': ' + c.facebook + '\n';
+            if(c.instagram) texto += t('instagram') + ': ' + c.instagram + '\n';
+            if(c.linkedin) texto += t('linkedin') + ': ' + c.linkedin + '\n';
             if(btnCompartir) {
                 btnCompartir.onclick = function() {
                     if (navigator.share) {
                         navigator.share({
-                            title: 'Contacto',
+                            title: t('contacto'),
                             text: texto,
                             url: window.location.href
                         });
                     } else {
-                        alert('La función de compartir no está disponible en este dispositivo.');
+                        alert(t('compartir_no_disponible'));
                     }
                 }
             }
@@ -575,12 +507,21 @@
         };
     });
     window.eliminarContacto = function(idx) {
-        if(confirm('¿Eliminar este contacto?')) {
+        const modal = document.getElementById('modalConfirmarEliminar');
+        document.getElementById('msgConfirmarEliminar').textContent = t('eliminar_contacto_confirm');
+        document.getElementById('btnConfirmarEliminar').textContent = t('eliminar');
+        document.getElementById('btnCancelarEliminar').textContent = t('cancelar');
+        modal.style.display = 'flex';
+        document.getElementById('btnConfirmarEliminar').onclick = function() {
             const contacts = getContacts();
             contacts.splice(idx, 1);
             setContacts(contacts);
             renderContacts();
-        }
+            modal.style.display = 'none';
+        };
+        document.getElementById('btnCancelarEliminar').onclick = function() {
+            modal.style.display = 'none';
+        };
     }
     renderContacts();
     </script>

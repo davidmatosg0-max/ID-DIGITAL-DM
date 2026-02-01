@@ -1,3 +1,61 @@
+    <!-- Botón Compartir recreado dinámicamente -->
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Insertar el botón Compartir en la barra de acciones si no existe
+            var actionsBar = document.querySelector('.id-actions-bar');
+            if (actionsBar && !document.getElementById('btnCompartir')) {
+                var btn = document.createElement('button');
+                btn.id = 'btnCompartir';
+                btn.title = typeof t === 'function' ? (t('compartir') || 'Compartir') : 'Compartir';
+                btn.innerHTML = '<i class="fa-solid fa-share-nodes"></i>';
+                btn.style.background = '#25D366';
+                btn.style.color = '#fff';
+                btn.style.padding = '10px 14px';
+                btn.style.borderRadius = '50%';
+                btn.style.fontSize = '1.3em';
+                btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.10)';
+                btn.style.border = 'none';
+                btn.style.cursor = 'pointer';
+                btn.style.transition = 'background 0.2s';
+                // Insertar en la posición original (después de btnTema)
+                var btnTema = document.getElementById('btnTema');
+                if (btnTema && btnTema.nextSibling) {
+                    actionsBar.insertBefore(btn, btnTema.nextSibling);
+                } else {
+                    actionsBar.appendChild(btn);
+                }
+                // Evento compartir
+                btn.addEventListener('click', function() {
+                    const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+                    let texto = '';
+                    if(data.nombre) texto += (typeof t === 'function' ? t('nombre') : 'Nombre') + ': ' + data.nombre + '\n';
+                    if(data.empresa) texto += (typeof t === 'function' ? t('empresa') : 'Empresa') + ': ' + data.empresa + '\n';
+                    if(data.cargo) texto += (typeof t === 'function' ? t('cargo') : 'Cargo') + ': ' + data.cargo + '\n';
+                    if(data.telefono) texto += (typeof t === 'function' ? t('telefono') : 'Teléfono') + ': ' + data.telefono + '\n';
+                    if(data.email) texto += (typeof t === 'function' ? t('email') : 'Correo electrónico') + ': ' + data.email + '\n';
+                    if(data.whatsapp) texto += (typeof t === 'function' ? t('whatsapp') : 'Whatsapp') + ': ' + data.whatsapp + '\n';
+                    if(data.facebook) texto += (typeof t === 'function' ? t('facebook') : 'Facebook') + ': ' + data.facebook + '\n';
+                    if(data.instagram) texto += (typeof t === 'function' ? t('instagram') : 'Instagram') + ': ' + data.instagram + '\n';
+                    if(data.linkedin) texto += (typeof t === 'function' ? t('linkedin') : 'LinkedIn') + ': ' + data.linkedin + '\n';
+                    if (navigator.share) {
+                        navigator.share({
+                            title: (typeof t === 'function' ? t('mi_tarjeta_contacto') : 'Mi tarjeta de contacto') || 'Mi tarjeta de contacto',
+                            text: texto,
+                            url: window.location.href
+                        }).catch(()=>{});
+                    } else {
+                        var modal = document.getElementById('modalCompartir');
+                        var content = document.getElementById('modalCompartirContent');
+                        document.getElementById('txtDatosCompartir').value = texto;
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        if(content) content.focus();
+                    }
+                });
+            }
+        });
+        </script>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,6 +65,84 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+                body.modo-oscuro {
+                    background: linear-gradient(135deg, #181c24 0%, #23272f 100%) !important;
+                    color: #e0e6ef !important;
+                }
+                .modo-oscuro .id-card {
+                    background: #23272f !important;
+                    color: #e0e6ef !important;
+                    box-shadow: 0 4px 24px #0008;
+                }
+                .modo-oscuro .id-title,
+                .modo-oscuro .id-cargo {
+                    color: #7ecfff !important;
+                }
+                .modo-oscuro .id-name {
+                    color: #fff !important;
+                }
+                .modo-oscuro .id-social-section a {
+                    background: #23272f !important;
+                    color: #7ecfff !important;
+                    box-shadow: 0 1px 4px #0005;
+                }
+                .modo-oscuro .id-social-section a:hover {
+                    background: #2176d2 !important;
+                    color: #fff !important;
+                }
+                .modo-oscuro .id-actions-bar a,
+                .modo-oscuro .id-actions-bar button {
+                    background: #23272f !important;
+                    color: #7ecfff !important;
+                    box-shadow: 0 2px 8px #0007;
+                    border: 1.5px solid #333 !important;
+                }
+                .modo-oscuro .id-actions-bar a[title="Editar"] {
+                    background: #2176d2 !important;
+                    color: #fff !important;
+                }
+                .modo-oscuro .id-actions-bar button[title="Compartir"] {
+                    background: #25D366 !important;
+                    color: #fff !important;
+                }
+                .modo-oscuro .id-actions-bar button[title="Contacto"] {
+                    background: #2196F3 !important;
+                    color: #fff !important;
+                }
+                .modo-oscuro .id-actions-bar a[title="Editar"]:hover,
+                .modo-oscuro .id-actions-bar button[title="Compartir"]:hover,
+                .modo-oscuro .id-actions-bar button[title="Contacto"]:hover {
+                    background: #111 !important;
+                }
+                .modo-oscuro .id-card-container {
+                    background: none !important;
+                }
+                .modo-oscuro .id-photo-section img {
+                    box-shadow: 0 2px 12px #000a;
+                }
+                .modo-oscuro #modalGuiaRapida > div,
+                .modo-oscuro #modalCompartirContent,
+                .modo-oscuro #modalCumpleContent,
+                .modo-oscuro #modalColorContent {
+                    background: #23272f !important;
+                    color: #e0e6ef !important;
+                    box-shadow: 0 8px 32px #000a;
+                }
+                .modo-oscuro input,
+                .modo-oscuro textarea {
+                    background: #23272f !important;
+                    color: #e0e6ef !important;
+                    border: 1.5px solid #444 !important;
+                }
+                .modo-oscuro ::placeholder {
+                    color: #b0b8c9 !important;
+                }
+                .modo-oscuro .id-qr-section {
+                    background: none !important;
+                }
+                .modo-oscuro .id-header {
+                    background: none !important;
+                }
         body {
             min-height: 100vh;
             margin: 0;
@@ -144,9 +280,102 @@
 </head>
 <body>
     <div class="id-actions-bar">
-        <a href="Formulario de perfil.html" title="Editar"><i class="fa-solid fa-pen-to-square"></i></a>
-        <button id="btnCompartir" title="Compartir"><i class="fa-solid fa-share-nodes"></i></button>
+        <a href="Formulario de perfil.html" id="btnEditar" title="Editar"><i class="fa-solid fa-pen-to-square"></i></a>
+        <button id="btnTema" title="Cambiar tema"><i class="fa-solid fa-palette"></i></button>
+        <!-- Botón Compartir será recreado abajo -->
+        <button id="btnOscuro" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
         <button id="btnVerContacto" title="Contacto"><i class="fa-solid fa-address-book"></i></button>
+        <button id="btnGuiaRapida" title="Guía rápida" style="background:#FFC107;color:#fff;"><i class="fa-solid fa-circle-info"></i></button>
+                    <!-- Modal Guía Rápida -->
+                    <div id="modalGuiaRapida" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:5000;align-items:center;justify-content:center;">
+                        <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:left;position:relative;display:flex;flex-direction:column;align-items:center;">
+                            <div style="font-size:2em;color:#FFC107;margin-bottom:10px;"><i class='fa-solid fa-circle-info'></i></div>
+                            <div id="txtGuiaRapida" style="font-size:1.05em;line-height:1.5;margin-bottom:18px;text-align:left;max-height:320px;overflow:auto;"></div>
+                            <button id="btnCerrarGuiaRapida" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;">Cerrar</button>
+                        </div>
+                    </div>
+                    <script>
+                    // Guía rápida multilingüe
+                    function getGuiaRapida(lang) {
+                        switch(lang) {
+                            case 'en':
+                                return `
+            1. <b>Select your language</b> on the welcome screen. Everything translates automatically.<br><br>
+            2. <b>Create or edit your profile</b> with your data, photo, and logo. Use the pencil button to edit.<br><br>
+            3. <b>Share your card</b> with the share button:<br>
+            &nbsp;&nbsp;- On mobile: use the native menu (WhatsApp, Email, etc.).<br>
+            &nbsp;&nbsp;- On PC: copy and paste the data from the modal.<br><br>
+            4. <b>Manage your contacts</b> from the agenda:<br>
+            &nbsp;&nbsp;- Add, edit, delete, and search contacts.<br>
+            &nbsp;&nbsp;- Import from your mobile or export to CSV.<br><br>
+            5. <b>Customize colors and dark mode</b> with the top bar buttons.<br><br>
+            6. <b>Get birthday notifications</b> for your contacts and congratulate them quickly.<br><br>
+            Done! Your identity and contacts always at hand, easy to share and multilingual.`;
+                            case 'fr':
+                                return `
+            1. <b>Sélectionnez votre langue</b> sur l'écran d'accueil. Tout est traduit automatiquement.<br><br>
+            2. <b>Créez ou modifiez votre profil</b> avec vos données, photo et logo. Utilisez le bouton crayon pour modifier.<br><br>
+            3. <b>Partagez votre carte</b> avec le bouton de partage :<br>
+            &nbsp;&nbsp;- Sur mobile : utilisez le menu natif (WhatsApp, Email, etc.).<br>
+            &nbsp;&nbsp;- Sur PC : copiez et collez les données depuis la fenêtre.<br><br>
+            4. <b>Gérez vos contacts</b> depuis l'agenda :<br>
+            &nbsp;&nbsp;- Ajoutez, modifiez, supprimez et recherchez des contacts.<br>
+            &nbsp;&nbsp;- Importez depuis votre mobile ou exportez en CSV.<br><br>
+            5. <b>Personnalisez les couleurs et le mode sombre</b> avec les boutons de la barre supérieure.<br><br>
+            6. <b>Recevez des notifications d'anniversaire</b> de vos contacts et félicitez-les rapidement.<br><br>
+            Prêt ! Votre identité et vos contacts toujours à portée de main, facile à partager et multilingue.`;
+                            default:
+                                return `
+            1. <b>Selecciona tu idioma</b> en la pantalla de inicio. Todo se traduce automáticamente.<br><br>
+            2. <b>Crea o edita tu perfil</b> con tus datos, foto y logo. Usa el botón de lápiz para editar.<br><br>
+            3. <b>Comparte tu tarjeta</b> con el botón de compartir:<br>
+            &nbsp;&nbsp;- En móvil: usa el menú nativo (WhatsApp, Email, etc.).<br>
+            &nbsp;&nbsp;- En PC: copia y pega los datos desde el modal.<br><br>
+            4. <b>Gestiona tus contactos</b> desde la agenda:<br>
+            &nbsp;&nbsp;- Agrega, edita, elimina y busca contactos.<br>
+            &nbsp;&nbsp;- Importa desde tu móvil o exporta a CSV.<br><br>
+            5. <b>Personaliza colores y modo oscuro</b> con los botones de la barra superior.<br><br>
+            6. <b>Recibe avisos de cumpleaños</b> de tus contactos y felicítalos rápido.<br><br>
+            ¡Listo! Tu identidad y contactos siempre a mano, fácil de compartir y multilingüe.`;
+                        }
+                    }
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var btnGuia = document.getElementById('btnGuiaRapida');
+                        var modalGuia = document.getElementById('modalGuiaRapida');
+                        var txtGuia = document.getElementById('txtGuiaRapida');
+                        var btnCerrarGuia = document.getElementById('btnCerrarGuiaRapida');
+                        function mostrarGuia() {
+                            var lang = (typeof getLang === 'function') ? getLang() : 'es';
+                            txtGuia.innerHTML = getGuiaRapida(lang);
+                            modalGuia.style.display = 'flex';
+                            modalGuia.style.alignItems = 'center';
+                            modalGuia.style.justifyContent = 'center';
+                        }
+                        if(btnGuia && modalGuia && txtGuia && btnCerrarGuia) {
+                            btnGuia.onclick = mostrarGuia;
+                            btnCerrarGuia.onclick = function() {
+                                modalGuia.style.display = 'none';
+                            };
+                        }
+                        // Sincronizar guía si cambia el idioma global
+                        window.addEventListener('storage', function(e) {
+                            if(e.key === 'lang') setTimeout(function(){
+                                if(modalGuia.style.display === 'flex') mostrarGuia();
+                            }, 100);
+                        });
+                    });
+                    </script>
+            <!-- Modal para seleccionar colores -->
+            <div id="colorModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0008;z-index:1000;align-items:center;justify-content:center;">
+                <div style="background:#fff;padding:24px 18px;border-radius:12px;box-shadow:0 2px 12px #0003;display:flex;flex-direction:column;align-items:center;gap:16px;min-width:220px;">
+                    <label style="font-weight:bold;">Color 1: <input type="color" id="color1" value="#2176d2"></label>
+                    <label style="font-weight:bold;">Color 2: <input type="color" id="color2" value="#25D366"></label>
+                    <div style="display:flex;gap:12px;">
+                        <button id="guardarColores" style="background:#25D366;color:#fff;padding:8px 18px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Guardar</button>
+                        <button id="cerrarColores" style="background:#aaa;color:#fff;padding:8px 18px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Cerrar</button>
+                    </div>
+                </div>
+            </div>
     </div>
     <div class="id-card-container">
         <div class="id-card">
@@ -177,39 +406,213 @@
                 <a id="instagram" href="#" target="_blank" title="Instagram" style="color:#E4405F;font-size:1.6em;display:none;"><i class="fab fa-instagram"></i></a>
                 <a id="linkedin" href="#" target="_blank" title="LinkedIn" style="color:#0A66C2;font-size:1.6em;display:none;"><i class="fab fa-linkedin"></i></a>
             </div>
+            <!-- Modal para compartir manualmente -->
+            <div id="modalCompartir" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:4000;align-items:center;justify-content:center;">
+                <div id="modalCompartirContent" style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;">
+                    <div style="font-size:2em;color:#2176d2;margin-bottom:10px;"><i class='fa-solid fa-share-nodes'></i></div>
+                    <div style="font-size:1.1em;margin-bottom:12px;" id="txtCompartirManual">Puedes copiar y compartir estos datos:</div>
+                    <textarea id="txtDatosCompartir" style="width:95%;height:120px;resize:none;font-size:1em;margin-bottom:12px;"></textarea>
+                    <button id="btnCerrarCompartir" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;"><script>document.write(typeof t==='function'?t('cerrar'):'Cerrar')</script></button>
+                </div>
+            </div>
+            <!-- Modal de cumpleaños -->
+            <div id="modalCumple" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:3000;align-items:center;justify-content:center;">
+                <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:center;position:relative;">
+                    <div style="font-size:2.5em;color:#25D366;margin-bottom:10px;"><i class='fa-solid fa-cake-candles'></i></div>
+                    <div id="msgCumple" style="font-size:1.15em;margin-bottom:22px;"></div>
+                    <button id="cerrarModalCumple" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;margin-top:18px;">Cerrar</button>
+                </div>
+            </div>
         </div>
     </div>
     <script>
+                                // Traducción dinámica de los botones del modal de color
+                                function traducirModalColores() {
+                                    var btnGuardar = document.getElementById('guardarColores');
+                                    var btnCerrar = document.getElementById('cerrarColores');
+                                    if(btnGuardar) btnGuardar.textContent = t('guardar') || 'Guardar';
+                                    if(btnCerrar) btnCerrar.textContent = t('cerrar') || 'Cerrar';
+                                }
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    traducirModalColores();
+                                    window.addEventListener('storage', function(e) {
+                                        if(e.key === 'lang') {
+                                            setTimeout(traducirModalColores, 100);
+                                        }
+                                    });
+                                });
+                            // Traducción dinámica de títulos de botones y textos
+                            function traducirID() {
+                                document.getElementById('btnEditar').title = t('editar');
+                                document.getElementById('btnTema').title = t('cambiar_tema') || 'Cambiar tema';
+                                document.getElementById('btnCompartir').title = t('compartir') || 'Compartir';
+                                document.getElementById('btnOscuro').title = t('modo_oscuro') || 'Modo oscuro';
+                                document.getElementById('btnVerContacto').title = t('contactos') || 'Contactos';
+                                // Traducción de los iconos de redes sociales
+                                var redes = [
+                                    {id: 'whatsapp', key: 'whatsapp'},
+                                    {id: 'telefono', key: 'telefono'},
+                                    {id: 'email', key: 'email'},
+                                    {id: 'facebook', key: 'facebook'},
+                                    {id: 'instagram', key: 'instagram'},
+                                    {id: 'linkedin', key: 'linkedin'}
+                                ];
+                                redes.forEach(function(r) {
+                                    var el = document.getElementById(r.id);
+                                    if (el) el.title = t(r.key);
+                                });
+                            }
+                            document.addEventListener('DOMContentLoaded', function() {
+                                traducirID();
+                            });
+                        // Mostrar modal de cumpleaños si hoy es el cumpleaños del usuario
+                        document.addEventListener('DOMContentLoaded', function() {
+                            try {
+                                const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+                                if (data && data.nacimiento && typeof data.nacimiento === 'string' && data.nacimiento.length >= 10) {
+                                    const hoy = new Date();
+                                    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+                                    const dia = hoy.getDate().toString().padStart(2, '0');
+                                    const hoyMesDia = mes + '-' + dia;
+                                    // data.nacimiento formato 'YYYY-MM-DD'
+                                    if (data.nacimiento.slice(5, 10) === hoyMesDia) {
+                                        document.getElementById('msgCumple').innerHTML = `<b>🎉 ${t('feliz_cumple')}!</b><br>${data.nombre ? data.nombre : ''}`;
+                                        document.getElementById('modalCumple').style.display = 'flex';
+                                        document.getElementById('cerrarModalCumple').onclick = function() {
+                                            document.getElementById('modalCumple').style.display = 'none';
+                                        };
+                                    }
+                                }
+                            } catch(e) { /* Silenciar error */ }
+                        });
                     document.getElementById('btnConfig').onclick = function() {
-                        alert('Aquí irá la configuración.');
+                        alert(t('configuracion_alerta'));
                     };
+            // Restaurar colores personalizados al cargar la página
+            window.addEventListener('DOMContentLoaded', function() {
+                const savedColors = JSON.parse(localStorage.getItem('customColors') || 'null');
+                if (savedColors && savedColors.c1 && savedColors.c2) {
+                    document.body.style.background = `linear-gradient(135deg, ${savedColors.c1} 0%, ${savedColors.c2} 100%)`;
+                    document.getElementById('color1').value = savedColors.c1;
+                    document.getElementById('color2').value = savedColors.c2;
+                }
+            });
+            // Botón para abrir el modal de selección de colores
+            document.getElementById('btnTema').onclick = function() {
+                const savedColors = JSON.parse(localStorage.getItem('customColors') || 'null');
+                if (savedColors && savedColors.c1 && savedColors.c2) {
+                    document.getElementById('color1').value = savedColors.c1;
+                    document.getElementById('color2').value = savedColors.c2;
+                }
+                document.getElementById('colorModal').style.display = 'flex';
+            };
+            // Botón guardar colores
+            document.getElementById('guardarColores').onclick = function() {
+                const c1 = document.getElementById('color1').value;
+                const c2 = document.getElementById('color2').value;
+                document.body.style.background = `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+                localStorage.setItem('customColors', JSON.stringify({c1, c2}));
+                document.getElementById('colorModal').style.display = 'none';
+            };
+            // Botón cerrar modal sin guardar
+            document.getElementById('cerrarColores').onclick = function() {
+                document.getElementById('colorModal').style.display = 'none';
+            };
+            // Botón para modo oscuro (luna)
+            document.getElementById('btnOscuro').onclick = function() {
+                const body = document.body;
+                if (!body.classList.contains('modo-oscuro')) {
+                    body.classList.add('modo-oscuro');
+                    body.style.background = '#181a1b';
+                    document.querySelectorAll('.id-card, .id-card *').forEach(el => {
+                        el.style.background = '#23272b';
+                        el.style.color = '#eee';
+                    });
+                } else {
+                    body.classList.remove('modo-oscuro');
+                    body.style.background = 'linear-gradient(135deg, #2176d2 0%, #25D366 100%)';
+                    document.querySelectorAll('.id-card, .id-card *').forEach(el => {
+                        el.style.background = '';
+                        el.style.color = '';
+                    });
+                }
+            };
             // Botón para ir a la lista de contactos
             document.getElementById('btnVerContacto').onclick = function() {
                 window.location.href = 'contactos.html';
             };
         // Compartir tarjeta con Web Share API
-        document.getElementById('btnCompartir').onclick = function() {
-            const data = JSON.parse(localStorage.getItem('profileData') || '{}');
-            let texto = '';
-            if(data.nombre) texto += 'Nombre: ' + data.nombre + '\n';
-            if(data.empresa) texto += 'Empresa: ' + data.empresa + '\n';
-            if(data.cargo) texto += 'Cargo: ' + data.cargo + '\n';
-            if(data.telefono) texto += 'Teléfono: ' + data.telefono + '\n';
-            if(data.email) texto += 'Email: ' + data.email + '\n';
-            if(data.whatsapp) texto += 'Whatsapp: ' + data.whatsapp + '\n';
-            if(data.facebook) texto += 'Facebook: ' + data.facebook + '\n';
-            if(data.instagram) texto += 'Instagram: ' + data.instagram + '\n';
-            if(data.linkedin) texto += 'LinkedIn: ' + data.linkedin + '\n';
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Mi tarjeta de contacto',
-                    text: texto,
-                    url: window.location.href
+        // RECREAR BOTÓN COMPARTIR Y SU EVENTO
+        document.addEventListener('DOMContentLoaded', function() {
+            // Insertar el botón Compartir en la barra de acciones
+            var actionsBar = document.querySelector('.id-actions-bar');
+            if (actionsBar && !document.getElementById('btnCompartir')) {
+                var btn = document.createElement('button');
+                btn.id = 'btnCompartir';
+                btn.title = t('compartir') || 'Compartir';
+                btn.innerHTML = '<i class="fa-solid fa-share-nodes"></i>';
+                btn.style.background = '#25D366';
+                btn.style.color = '#fff';
+                btn.style.padding = '10px 14px';
+                btn.style.borderRadius = '50%';
+                btn.style.fontSize = '1.3em';
+                btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.10)';
+                btn.style.border = 'none';
+                btn.style.cursor = 'pointer';
+                btn.style.transition = 'background 0.2s';
+                actionsBar.insertBefore(btn, actionsBar.children[2]);
+                // Evento compartir
+                btn.addEventListener('click', function() {
+                    const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+                    let texto = '';
+                    if(data.nombre) texto += t('nombre') + ': ' + data.nombre + '\n';
+                    if(data.empresa) texto += t('empresa') + ': ' + data.empresa + '\n';
+                    if(data.cargo) texto += t('cargo') + ': ' + data.cargo + '\n';
+                    if(data.telefono) texto += t('telefono') + ': ' + data.telefono + '\n';
+                    if(data.email) texto += t('email') + ': ' + data.email + '\n';
+                    if(data.whatsapp) texto += t('whatsapp') + ': ' + data.whatsapp + '\n';
+                    if(data.facebook) texto += t('facebook') + ': ' + data.facebook + '\n';
+                    if(data.instagram) texto += t('instagram') + ': ' + data.instagram + '\n';
+                    if(data.linkedin) texto += t('linkedin') + ': ' + data.linkedin + '\n';
+                    var modal = document.getElementById('modalCompartir');
+                    var content = document.getElementById('modalCompartirContent');
+                    document.getElementById('txtDatosCompartir').value = texto;
+                    modal.style.display = 'flex';
+                    modal.style.alignItems = 'center';
+                    modal.style.justifyContent = 'center';
+                    if(content) content.focus();
                 });
-            } else {
-                alert('La función de compartir no está disponible en este dispositivo.');
             }
-        };
+        });
+        // Cerrar modal compartir manual
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnCerrarCompartir = document.getElementById('btnCerrarCompartir');
+            var txtCompartirManual = document.getElementById('txtCompartirManual');
+            if(btnCerrarCompartir) {
+                btnCerrarCompartir.onclick = function() {
+                    document.getElementById('modalCompartir').style.display = 'none';
+                };
+            }
+            // Traducción dinámica del modal compartir
+            function traducirModalCompartir() {
+                if(txtCompartirManual) txtCompartirManual.textContent = t('copiar_compartir') || 'Puedes copiar y compartir estos datos:';
+                if(btnCerrarCompartir) btnCerrarCompartir.textContent = t('cerrar') || 'Cerrar';
+            }
+            traducirModalCompartir();
+            window.addEventListener('storage', function(e) {
+                if(e.key === 'lang') setTimeout(traducirModalCompartir, 100);
+            });
+        });
+    // Sincronizar traducción del modal compartir si cambia el idioma global
+    window.addEventListener('storage', function(e) {
+        if(e.key === 'lang') setTimeout(function(){
+            if(window.t && document.getElementById('btnCerrarCompartir')) {
+                document.getElementById('btnCerrarCompartir').textContent = t('cerrar');
+                var txtCompartirManual = document.getElementById('txtCompartirManual');
+                if(txtCompartirManual) txtCompartirManual.textContent = t('copiar_compartir') || 'Puedes copiar y compartir estos datos:';
+            }
+        }, 100);
+    });
     // Obtener datos de localStorage (puedes adaptar para recibir de un formulario)
     const data = JSON.parse(localStorage.getItem('profileData') || '{}');
     if(data) {
@@ -234,6 +637,10 @@
             foto.src = data.foto;
             foto.style.display = 'block';
         }
+        // Sincronizar traducción de títulos de iconos de redes sociales después de mostrarlos
+        window.addEventListener('storage', function(e) {
+            if(e.key === 'lang') setTimeout(traducirID, 100);
+        });
         // QR vCard
         function escapeVCARD(str) {
             return (str||'').replace(/\n/g, '\\n').replace(/,/g, '\,').replace(/;/g, '\;');
@@ -312,6 +719,8 @@
             l.style.display = 'flex';
         }
     }
+    // Aplicar traducción de títulos de iconos de redes sociales después de mostrarlos
+    traducirID();
     </script>
 </body>
 </html>

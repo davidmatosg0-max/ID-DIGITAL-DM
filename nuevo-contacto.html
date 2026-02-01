@@ -3,8 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo Contacto</title>
+    <title><script>document.write(t('nuevo_contacto'))</script></title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .profile-preview-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+        }
+        .profile-preview-container img {
+            max-width: 120px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0001;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2176d2 0%, #25D366 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .profile-container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #0002;
+            padding: 28px 12px 22px 12px;
+            max-width: 370px;
+            width: 95vw;
+            margin: 40px auto 0 auto;
+            box-sizing: border-box;
+        }
+        h2 {
+            color: #2176d2;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        label {
+            color: #2176d2;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="file"] {
+            width: 100%;
+            max-width: 320px;
+            padding: 8px 10px;
+            margin-top: 4px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        button[type="submit"], button[type="button"] {
+            background: #25D366;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 0;
+            width: 100%;
+            font-size: 1.08em;
+            font-weight: bold;
+            box-shadow: 0 2px 8px #0001;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            transition: background 0.2s;
+        }
+        button[type="submit"]:hover, button[type="button"]:hover {
+            background: #2176d2;
+        }
+        @media (max-width: 480px) {
+            .profile-container {
+                padding: 10px 2vw 10px 2vw;
+                max-width: 98vw;
+            }
+            input[type="text"], input[type="email"], input[type="tel"], input[type="file"] {
+                max-width: 90vw;
+            }
+            h2 { font-size: 1.2em; }
+        }
+    </style>
 </head>
 <body>
     <div class="profile-container">
@@ -12,55 +100,88 @@
             <img id="empresaLogoImg" src="#" alt="Logo Empresa" style="display:none;max-height:48px;max-width:80px;border-radius:8px;background:#fff;"/>
             <span id="empresaNombrePreview" style="font-size:1.3em;font-weight:bold;"></span>
         </div>
-        <h2>Nuevo Contacto</h2>
+        <h2><script>document.write(t('nuevo_contacto'))</script></h2>
         <form id="profileForm">
-            <label for="profileEmpresa">Empresa:</label><br>
+            <label for="profileEmpresa"><script>document.write(t('empresa'))</script>:</label><br>
             <input type="text" id="profileEmpresa" name="profileEmpresa"><br><br>
-            <label for="profileLogo">Logo de la empresa (JPG, PNG):</label><br>
+            <label for="profileLogo"><script>document.write(t('logo_empresa'))</script>:</label><br>
             <input type="file" id="profileLogo" name="profileLogo" accept="image/jpeg, image/png"><br><br>
             <div class="profile-preview-container">
                 <img id="profilePreview" src="#" alt="Previsualización" style="display:none; margin-bottom:10px; max-width:120px; border-radius:10px; margin-left:auto; margin-right:auto;"/>
             </div>
-            <style>
-                .profile-preview-container {
-                    width: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    margin-top: 20px;
-                    margin-bottom: 0;
-                }
-            </style>
-            <label for="profileFoto">Foto de perfil (JPG, PNG):</label><br>
+            <label for="profileFoto"><script>document.write(t('foto_perfil'))</script>:</label><br>
             <input type="file" id="profileFoto" name="profileFoto" accept="image/jpeg, image/png"><br><br>
 
-            <label for="profileNombre">Nombre completo:</label><br>
+            <label for="profileNombre"><script>document.write(t('nombre_completo'))</script>:</label><br>
             <input type="text" id="profileNombre" name="profileNombre" required><br><br>
 
-            <label for="profileCargo">Cargo:</label><br>
+            <label for="profileCargo"><script>document.write(t('cargo'))</script>:</label><br>
             <input type="text" id="profileCargo" name="profileCargo" required><br><br>
 
-            <h3>Redes</h3>
-            <label for="profileWhatsapp">Whatsapp:</label><br>
+            <h3><script>document.write(t('redes'))</script></h3>
+            <label for="profileWhatsapp"><script>document.write(t('whatsapp'))</script>:</label><br>
             <input type="text" id="profileWhatsapp" name="profileWhatsapp"><br><br>
 
-            <label for="profileTelefono">Teléfono:</label><br>
+            <label for="profileTelefono"><script>document.write(t('telefono'))</script>:</label><br>
             <input type="tel" id="profileTelefono" name="profileTelefono"><br><br>
 
-            <label for="profileEmail">Email:</label><br>
+            <label for="profileEmail"><script>document.write(t('email'))</script>:</label><br>
             <input type="email" id="profileEmail" name="profileEmail"><br><br>
 
-            <label for="profileFacebook">Facebook:</label><br>
+            <label for="profileFacebook"><script>document.write(t('facebook'))</script>:</label><br>
             <input type="text" id="profileFacebook" name="profileFacebook"><br><br>
 
-            <label for="profileInstagram">Instagram:</label><br>
+            <label for="profileInstagram"><script>document.write(t('instagram'))</script>:</label><br>
             <input type="text" id="profileInstagram" name="profileInstagram"><br><br>
 
-            <label for="profileLinkedin">LinkedIn:</label><br>
+            <label for="profileLinkedin"><script>document.write(t('linkedin'))</script>:</label><br>
             <input type="text" id="profileLinkedin" name="profileLinkedin"><br><br>
 
-            <button type="submit">Guardar</button>
+             <label for="profileNacimiento" id="labelNacimiento"></label><br>
+             <input type="date" id="profileNacimiento" name="profileNacimiento"><br><br>
+             <div class="desc-campo"><small id="desc_nacimiento"></small></div>
+
+            <button type="button" id="btnCargarEjemploContacto" style="background:#2176d2;color:#fff;margin-bottom:10px;">Subir ejemplo</button>
+            <button type="submit"><script>document.write(t('guardar'))</script></button>
         </form>
+        <script src="lang.js"></script>
+        <script>
+        function traducirNuevoContacto() {
+            if(window.t) {
+                document.querySelector('label[for="profileEmpresa"]').textContent = t('empresa')+':';
+                document.querySelector('label[for="profileLogo"]').textContent = t('logo_empresa')+':';
+                document.querySelector('label[for="profileFoto"]').textContent = t('foto_perfil')+':';
+                document.querySelector('label[for="profileNombre"]').textContent = t('nombre_completo')+':';
+                document.querySelector('label[for="profileCargo"]').textContent = t('cargo')+':';
+                document.getElementById('labelNacimiento').textContent = t('fecha_nacimiento')+':';
+                document.querySelector('h3').textContent = t('redes');
+                document.querySelector('label[for="profileWhatsapp"]').textContent = t('whatsapp')+':';
+                document.querySelector('label[for="profileTelefono"]').textContent = t('telefono')+':';
+                document.querySelector('label[for="profileEmail"]').textContent = t('email')+':';
+                document.querySelector('label[for="profileFacebook"]').textContent = t('facebook')+':';
+                document.querySelector('label[for="profileInstagram"]').textContent = t('instagram')+':';
+                document.querySelector('label[for="profileLinkedin"]').textContent = t('linkedin')+':';
+                document.querySelector('button[type="submit"]').textContent = t('guardar');
+                // Descripciones
+                const map = {
+                    desc_nacimiento: 'fecha_nacimiento_desc'
+                };
+                for(const id in map) {
+                    const el = document.getElementById(id);
+                    if(el) el.textContent = t(map[id]);
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            traducirNuevoContacto();
+            // Sincronizar traducción si cambia el idioma global desde otra pestaña o ventana
+            window.addEventListener('storage', function(e) {
+                if(e.key === 'lang') {
+                    setTimeout(traducirNuevoContacto, 100);
+                }
+            });
+        });
+        </script>
     </div>
     <script>
         // Previsualización en vivo de empresa y logo
@@ -123,6 +244,7 @@
             const logo = document.getElementById('empresaLogoImg').getAttribute('data-img') || '';
             const nombre = document.getElementById('profileNombre').value;
             const cargo = document.getElementById('profileCargo').value;
+            const nacimiento = document.getElementById('profileNacimiento').value;
             const whatsapp = document.getElementById('profileWhatsapp').value;
             const telefono = document.getElementById('profileTelefono').value;
             const email = document.getElementById('profileEmail').value;
@@ -130,14 +252,63 @@
             const instagram = document.getElementById('profileInstagram').value;
             const linkedin = document.getElementById('profileLinkedin').value;
             const foto = document.getElementById('profilePreview').getAttribute('data-img') || '';
-            const idUnico = 'ID-' + Date.now() + '-' + Math.floor(Math.random()*10000);
-            const data = { empresa, logo, nombre, cargo, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
-            // Guardar como nuevo contacto en la lista
             let contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
-            contactos.push(data);
+            let idxEdit = localStorage.getItem('editarContactoIdx');
+            if (window.location.search.includes('edit=1') && idxEdit !== null && contactos[idxEdit]) {
+                // Editar contacto existente
+                const idUnico = contactos[idxEdit].idUnico || ('ID-' + Date.now() + '-' + Math.floor(Math.random()*10000));
+                contactos[idxEdit] = { empresa, logo, nombre, cargo, nacimiento, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
+                localStorage.removeItem('editarContactoIdx');
+            } else {
+                // Nuevo contacto
+                const idUnico = 'ID-' + Date.now() + '-' + Math.floor(Math.random()*10000);
+                contactos.push({ empresa, logo, nombre, cargo, nacimiento, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico });
+            }
             localStorage.setItem('contactos', JSON.stringify(contactos));
             window.location.href = 'contactos.html';
         });
+                // Si es edición, cargar datos del contacto seleccionado
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (window.location.search.includes('edit=1')) {
+                        let idxEdit = localStorage.getItem('editarContactoIdx');
+                        let contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                        if (idxEdit !== null && contactos[idxEdit]) {
+                            const c = contactos[idxEdit];
+                            document.getElementById('profileEmpresa').value = c.empresa || '';
+                            document.getElementById('empresaNombrePreview').textContent = c.empresa || '';
+                            document.getElementById('profileNombre').value = c.nombre || '';
+                            document.getElementById('profileCargo').value = c.cargo || '';
+                            document.getElementById('profileNacimiento').value = c.nacimiento || '';
+                            document.getElementById('profileWhatsapp').value = c.whatsapp || '';
+                            document.getElementById('profileTelefono').value = c.telefono || '';
+                            document.getElementById('profileEmail').value = c.email || '';
+                            document.getElementById('profileFacebook').value = c.facebook || '';
+                            document.getElementById('profileInstagram').value = c.instagram || '';
+                            document.getElementById('profileLinkedin').value = c.linkedin || '';
+                            // Logo y foto
+                            var logoImg = document.getElementById('empresaLogoImg');
+                            var preview = document.getElementById('profilePreview');
+                            if (c.logo) {
+                                logoImg.setAttribute('data-img', c.logo);
+                                logoImg.src = c.logo;
+                                logoImg.style.display = 'block';
+                            }
+                            if (c.foto) {
+                                preview.setAttribute('data-img', c.foto);
+                                preview.src = c.foto;
+                                preview.style.display = 'block';
+                            }
+                        }
+                    }
+                });
+
+        // Mostrar logo y foto de perfil si tienen src válido
+        var logoImg = document.getElementById('empresaLogoImg');
+        if(logoImg.src && logoImg.src !== '#' && logoImg.src !== window.location.href+'#') logoImg.style.display = 'block';
+        else logoImg.style.display = 'none';
+        var preview = document.getElementById('profilePreview');
+        if(preview.src && preview.src !== '#' && preview.src !== window.location.href+'#') preview.style.display = 'block';
+        else preview.style.display = 'none';
     </script>
 </body>
 </html>

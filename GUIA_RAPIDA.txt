@@ -1,0 +1,19 @@
+# Guía Rápida - App ID Digital Local
+
+1. **Selecciona tu idioma** en la pantalla de inicio. Todo se traduce automáticamente.
+
+2. **Crea o edita tu perfil** con tus datos, foto y logo. Usa el botón de lápiz para editar.
+
+3. **Comparte tu tarjeta** con el botón de compartir:
+   - En móvil: usa el menú nativo (WhatsApp, Email, etc.).
+   - En PC: copia y pega los datos desde el modal.
+
+4. **Gestiona tus contactos** desde la agenda:
+   - Agrega, edita, elimina y busca contactos.
+   - Importa desde tu móvil o exporta a CSV.
+
+5. **Personaliza colores y modo oscuro** con los botones de la barra superior.
+
+6. **Recibe avisos de cumpleaños** de tus contactos y felicítalos rápido.
+
+¡Listo! Tu identidad y contactos siempre a mano, fácil de compartir y multilingüe.
