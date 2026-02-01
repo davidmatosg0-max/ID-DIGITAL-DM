@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Contacto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="profile-container">
+        <div id="empresaLogoPreview" style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:18px;">
+            <img id="empresaLogoImg" src="#" alt="Logo Empresa" style="display:none;max-height:48px;max-width:80px;border-radius:8px;background:#fff;"/>
+            <span id="empresaNombrePreview" style="font-size:1.3em;font-weight:bold;"></span>
+        </div>
+        <h2>Nuevo Contacto</h2>
+        <form id="profileForm">
+            <label for="profileEmpresa">Empresa:</label><br>
+            <input type="text" id="profileEmpresa" name="profileEmpresa"><br><br>
+            <label for="profileLogo">Logo de la empresa (JPG, PNG):</label><br>
+            <input type="file" id="profileLogo" name="profileLogo" accept="image/jpeg, image/png"><br><br>
+            <div class="profile-preview-container">
+                <img id="profilePreview" src="#" alt="Previsualización" style="display:none; margin-bottom:10px; max-width:120px; border-radius:10px; margin-left:auto; margin-right:auto;"/>
+            </div>
+            <style>
+                .profile-preview-container {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 20px;
+                    margin-bottom: 0;
+                }
+            </style>
+            <label for="profileFoto">Foto de perfil (JPG, PNG):</label><br>
+            <input type="file" id="profileFoto" name="profileFoto" accept="image/jpeg, image/png"><br><br>
+
+            <label for="profileNombre">Nombre completo:</label><br>
+            <input type="text" id="profileNombre" name="profileNombre" required><br><br>
+
+            <label for="profileCargo">Cargo:</label><br>
+            <input type="text" id="profileCargo" name="profileCargo" required><br><br>
+
+            <h3>Redes</h3>
+            <label for="profileWhatsapp">Whatsapp:</label><br>
+            <input type="text" id="profileWhatsapp" name="profileWhatsapp"><br><br>
+
+            <label for="profileTelefono">Teléfono:</label><br>
+            <input type="tel" id="profileTelefono" name="profileTelefono"><br><br>
+
+            <label for="profileEmail">Email:</label><br>
+            <input type="email" id="profileEmail" name="profileEmail"><br><br>
+
+            <label for="profileFacebook">Facebook:</label><br>
+            <input type="text" id="profileFacebook" name="profileFacebook"><br><br>
+
+            <label for="profileInstagram">Instagram:</label><br>
+            <input type="text" id="profileInstagram" name="profileInstagram"><br><br>
+
+            <label for="profileLinkedin">LinkedIn:</label><br>
+            <input type="text" id="profileLinkedin" name="profileLinkedin"><br><br>
+
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+    <script>
+        // Previsualización en vivo de empresa y logo
+        document.getElementById('profileEmpresa').addEventListener('input', function(e) {
+            document.getElementById('empresaNombrePreview').textContent = e.target.value;
+        });
+        document.getElementById('profileLogo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const logoImg = document.getElementById('empresaLogoImg');
+            if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    logoImg.src = e.target.result;
+                    logoImg.style.display = 'block';
+                    logoImg.setAttribute('data-img', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                logoImg.src = '#';
+                logoImg.style.display = 'none';
+                logoImg.removeAttribute('data-img');
+            }
+        });
+        document.getElementById('profileFoto').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('profilePreview');
+            if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Optimizar la imagen a 80x80px y calidad 0.5
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 80;
+                        canvas.height = 80;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, 80, 80);
+                        let optimized;
+                        if (file.type === 'image/png') {
+                            optimized = canvas.toDataURL('image/png', 0.7);
+                        } else {
+                            optimized = canvas.toDataURL('image/jpeg', 0.5);
+                        }
+                        preview.src = optimized;
+                        preview.style.display = 'block';
+                        preview.setAttribute('data-img', optimized);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
+                preview.removeAttribute('data-img');
+            }
+        });
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const empresa = document.getElementById('profileEmpresa').value;
+            const logo = document.getElementById('empresaLogoImg').getAttribute('data-img') || '';
+            const nombre = document.getElementById('profileNombre').value;
+            const cargo = document.getElementById('profileCargo').value;
+            const whatsapp = document.getElementById('profileWhatsapp').value;
+            const telefono = document.getElementById('profileTelefono').value;
+            const email = document.getElementById('profileEmail').value;
+            const facebook = document.getElementById('profileFacebook').value;
+            const instagram = document.getElementById('profileInstagram').value;
+            const linkedin = document.getElementById('profileLinkedin').value;
+            const foto = document.getElementById('profilePreview').getAttribute('data-img') || '';
+            const idUnico = 'ID-' + Date.now() + '-' + Math.floor(Math.random()*10000);
+            const data = { empresa, logo, nombre, cargo, whatsapp, telefono, email, facebook, instagram, linkedin, foto, idUnico };
+            // Guardar como nuevo contacto en la lista
+            let contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+            contactos.push(data);
+            localStorage.setItem('contactos', JSON.stringify(contactos));
+            window.location.href = 'contactos.html';
+        });
+    </script>
+</body>
+</html>

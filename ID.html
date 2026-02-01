@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID con QR y Redes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2176d2 0%, #25D366 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .id-card-container {
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 32px;
+        }
+        .id-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #0002;
+            padding: 28px 18px 22px 18px;
+            max-width: 370px;
+            width: 95vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .id-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .id-title {
+            font-size: 1.25em;
+            font-weight: bold;
+            color: #2176d2;
+        }
+        .id-info {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .id-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .id-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #222;
+        }
+        .id-cargo {
+            font-size: 1em;
+            color: #2176d2;
+        }
+        .id-photo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .id-photo-section img {
+            box-shadow: 0 2px 8px #0001;
+        }
+        .id-qr-section {
+            margin: 18px 0 0 0;
+            display: flex;
+            justify-content: center;
+        }
+        .id-social-section {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 18px;
+        }
+        .id-social-section a {
+            background: #f4f4f4;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            box-shadow: 0 1px 4px #0001;
+            transition: background 0.2s, color 0.2s;
+        }
+        .id-social-section a:hover {
+            background: #2176d2;
+            color: #fff !important;
+        }
+        @media (max-width: 480px) {
+            .id-card { padding: 16px 4vw 16px 4vw; }
+            .id-title { font-size: 1.05em; }
+            .id-name { font-size: 1em; }
+        }
+        .id-actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 370px;
+            width: 95vw;
+            margin: 0 auto;
+            padding-top: 18px;
+            gap: 8px;
+        }
+        .id-actions-bar a, .id-actions-bar button {
+            background: #2176d2;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 1.3em;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .id-actions-bar a[title="Editar"] { background: #2176d2; }
+        .id-actions-bar button[title="Compartir"] { background: #25D366; }
+        .id-actions-bar button[title="Contacto"] { background: #2196F3; }
+        .id-actions-bar a[title="Editar"]:hover, .id-actions-bar button[title="Compartir"]:hover, .id-actions-bar button[title="Contacto"]:hover {
+            background: #111;
+        }
+    </style>
+</head>
+<body>
+    <div class="id-actions-bar">
+        <a href="Formulario de perfil.html" title="Editar"><i class="fa-solid fa-pen-to-square"></i></a>
+        <button id="btnCompartir" title="Compartir"><i class="fa-solid fa-share-nodes"></i></button>
+        <button id="btnVerContacto" title="Contacto"><i class="fa-solid fa-address-book"></i></button>
+    </div>
+    <div class="id-card-container">
+        <div class="id-card">
+            <div class="id-header">
+                <span class="id-title" id="empresa"></span>
+                <img id="logo" src="#" alt="Logo" style="height:40px;max-width:60px;display:none;background:#fff;border-radius:8px;"/>
+                <button id="btnConfig" title="Configuración" style="background:#2176d2;color:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:1.2em;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:8px;">
+                    <i class="fa fa-cog"></i>
+                </button>
+            </div>
+            <div class="id-info">
+                <div class="id-details">
+                    <div class="id-name" id="nombre" style="display:none;"></div>
+                    <div class="id-cargo" id="cargo" style="display:none;"></div>
+                </div>
+                <div class="id-photo-section">
+                    <img id="foto" src="#" alt="Foto de perfil" style="width:70px;height:70px;border-radius:10px;object-fit:cover;border:2px solid #fff;display:none;">
+                </div>
+            </div>
+            <div class="id-qr-section">
+                <img id="qr" src="#" alt="QR Code" style="background:#fff;padding:8px;border-radius:12px;width:180px;height:180px;">
+            </div>
+            <div class="id-social-section" style="display:flex;justify-content:center;gap:18px;margin-top:18px;">
+                <a id="whatsapp" href="#" target="_blank" title="Whatsapp" style="color:#25D366;font-size:1.6em;display:none;"><i class="fab fa-whatsapp"></i></a>
+                <a id="telefono" href="#" target="_blank" title="Teléfono" style="color:#2196F3;font-size:1.6em;display:none;"><i class="fas fa-phone"></i></a>
+                <a id="email" href="#" target="_blank" title="Email" style="color:#FF9800;font-size:1.6em;display:none;"><i class="fas fa-envelope"></i></a>
+                <a id="facebook" href="#" target="_blank" title="Facebook" style="color:#1877F3;font-size:1.6em;display:none;"><i class="fab fa-facebook"></i></a>
+                <a id="instagram" href="#" target="_blank" title="Instagram" style="color:#E4405F;font-size:1.6em;display:none;"><i class="fab fa-instagram"></i></a>
+                <a id="linkedin" href="#" target="_blank" title="LinkedIn" style="color:#0A66C2;font-size:1.6em;display:none;"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+    <script>
+                    document.getElementById('btnConfig').onclick = function() {
+                        alert('Aquí irá la configuración.');
+                    };
+            // Botón para ir a la lista de contactos
+            document.getElementById('btnVerContacto').onclick = function() {
+                window.location.href = 'contactos.html';
+            };
+        // Compartir tarjeta con Web Share API
+        document.getElementById('btnCompartir').onclick = function() {
+            const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+            let texto = '';
+            if(data.nombre) texto += 'Nombre: ' + data.nombre + '\n';
+            if(data.empresa) texto += 'Empresa: ' + data.empresa + '\n';
+            if(data.cargo) texto += 'Cargo: ' + data.cargo + '\n';
+            if(data.telefono) texto += 'Teléfono: ' + data.telefono + '\n';
+            if(data.email) texto += 'Email: ' + data.email + '\n';
+            if(data.whatsapp) texto += 'Whatsapp: ' + data.whatsapp + '\n';
+            if(data.facebook) texto += 'Facebook: ' + data.facebook + '\n';
+            if(data.instagram) texto += 'Instagram: ' + data.instagram + '\n';
+            if(data.linkedin) texto += 'LinkedIn: ' + data.linkedin + '\n';
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mi tarjeta de contacto',
+                    text: texto,
+                    url: window.location.href
+                });
+            } else {
+                alert('La función de compartir no está disponible en este dispositivo.');
+            }
+        };
+    // Obtener datos de localStorage (puedes adaptar para recibir de un formulario)
+    const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+    if(data) {
+        if(data.empresa) document.getElementById('empresa').textContent = data.empresa;
+        if(data.logo) {
+            const logo = document.getElementById('logo');
+            logo.src = data.logo;
+            logo.style.display = 'block';
+        }
+        if(data.nombre) {
+            const nombre = document.getElementById('nombre');
+            nombre.textContent = data.nombre;
+            nombre.style.display = 'block';
+        }
+        if(data.cargo) {
+            const cargo = document.getElementById('cargo');
+            cargo.textContent = data.cargo;
+            cargo.style.display = 'block';
+        }
+        if(data.foto) {
+            const foto = document.getElementById('foto');
+            foto.src = data.foto;
+            foto.style.display = 'block';
+        }
+        // QR vCard
+        function escapeVCARD(str) {
+            return (str||'').replace(/\n/g, '\\n').replace(/,/g, '\,').replace(/;/g, '\;');
+        }
+        // QR SOLO DATOS DE TEXTO (sin foto)
+        let xSocial = [];
+        if (data.whatsapp) xSocial.push(`X-SOCIALPROFILE;type=whatsapp:${escapeVCARD(data.whatsapp)}`);
+        if (data.facebook) xSocial.push(`X-SOCIALPROFILE;type=facebook:${escapeVCARD(data.facebook)}`);
+        if (data.instagram) xSocial.push(`X-SOCIALPROFILE;type=instagram:${escapeVCARD(data.instagram)}`);
+        if (data.linkedin) xSocial.push(`X-SOCIALPROFILE;type=linkedin:${escapeVCARD(data.linkedin)}`);
+        const vCardQR = [
+            'BEGIN:VCARD',
+            'VERSION:3.0',
+            `FN:${escapeVCARD(data.nombre)}`,
+            `ORG:${escapeVCARD(data.empresa)}`,
+            `TITLE:${escapeVCARD(data.cargo)}`,
+            data.telefono ? `TEL;TYPE=CELL:${escapeVCARD(data.telefono)}` : '',
+            data.email ? `EMAIL;TYPE=INTERNET:${escapeVCARD(data.email)}` : '',
+            ...xSocial,
+            'END:VCARD'
+        ].filter(Boolean).join('\n');
+        document.getElementById('qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(vCardQR)}`;
+
+        // vCard COMPLETA (con foto) para descarga
+        let photoLine = '';
+        if (data.foto && data.foto.startsWith('data:image/')) {
+            const match = data.foto.match(/^data:(image\/(png|jpeg));base64,(.*)$/);
+            if (match) {
+                const mime = match[1];
+                const b64 = match[3];
+                photoLine = `PHOTO;ENCODING=b;TYPE=${mime.split('/')[1].toUpperCase()}:${b64}`;
+            }
+        }
+        const vCardFull = [
+            'BEGIN:VCARD',
+            'VERSION:3.0',
+            `FN:${escapeVCARD(data.nombre)}`,
+            `ORG:${escapeVCARD(data.empresa)}`,
+            `TITLE:${escapeVCARD(data.cargo)}`,
+            data.telefono ? `TEL;TYPE=CELL:${escapeVCARD(data.telefono)}` : '',
+            data.email ? `EMAIL;TYPE=INTERNET:${escapeVCARD(data.email)}` : '',
+            ...xSocial,
+            photoLine,
+            'END:VCARD'
+        ].filter(Boolean).join('\n');
+
+        // Redes
+        if(data.whatsapp) {
+            const w = document.getElementById('whatsapp');
+            w.href = 'https://wa.me/' + data.whatsapp;
+            w.style.display = 'flex';
+        }
+        if(data.telefono) {
+            const t = document.getElementById('telefono');
+            t.href = 'tel:' + data.telefono;
+            t.style.display = 'flex';
+        }
+        if(data.email) {
+            const e = document.getElementById('email');
+            e.href = 'mailto:' + data.email;
+            e.style.display = 'flex';
+        }
+        if(data.facebook) {
+            const f = document.getElementById('facebook');
+            f.href = data.facebook;
+            f.style.display = 'flex';
+        }
+        if(data.instagram) {
+            const i = document.getElementById('instagram');
+            i.href = data.instagram;
+            i.style.display = 'flex';
+        }
+        if(data.linkedin) {
+            const l = document.getElementById('linkedin');
+            l.href = data.linkedin;
+            l.style.display = 'flex';
+        }
+    }
+    </script>
+</body>
+</html>

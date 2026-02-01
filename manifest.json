@@ -1,0 +1,21 @@
+{
+  "name": "ID Digital Local DM",
+  "short_name": "ID Local",
+  "start_url": "Bienvenido.html",
+  "display": "standalone",
+  "background_color": "#2176d2",
+  "theme_color": "#25D366",
+  "description": "Gestiona y comparte tu identidad digital y contactos.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
