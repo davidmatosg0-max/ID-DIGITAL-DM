@@ -121,7 +121,7 @@
             <label for="profileLogo"><script>document.write(t('logo_empresa'))</script>:</label><br>
             <input type="file" id="profileLogo" name="profileLogo" accept="image/jpeg, image/png"><br><br>
             <div class="desc-campo"><small id="desc_logo_empresa"></small></div>
-            <!-- Botón de cargar datos de ejemplo eliminado -->
+
             <label for="profileFoto"><script>document.write(t('foto_perfil'))</script>:</label><br>
             <input type="file" id="profileFoto" name="profileFoto" accept="image/jpeg, image/png"><br><br>
             <div class="desc-campo"><small id="desc_foto_perfil"></small></div>
@@ -284,7 +284,7 @@
                     logoImg.removeAttribute('data-img');
                 }
             });
-        // Botón de cargar datos de ejemplo eliminado
+
     document.getElementById('profileFoto').addEventListener('change', function(event) {
         const file = event.target.files[0];
         const preview = document.getElementById('profilePreview');
