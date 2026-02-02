@@ -479,28 +479,42 @@
                                 ];
                                 redes.forEach(function(r) {
                                     var el = document.getElementById(r.id);
-                                    if (el) el.title = t(r.key);
+                                    if (el) el.setAttribute('title', t(r.key));
                                 });
-                                // Traducir botón Compartir si existe
-                                var btnCompartir = document.getElementById('btnCompartir');
-                                if (btnCompartir) btnCompartir.title = t('compartir') || 'Compartir';
+                                // Traducir todos los botones de la barra de acciones
+                                var btns = [
+                                    {id: 'btnEditar', key: 'editar'},
+                                    {id: 'btnTema', key: 'cambiar_tema'},
+                                    {id: 'btnOscuro', key: 'modo_oscuro'},
+                                    {id: 'btnVerContacto', key: 'contactos'},
+                                    {id: 'btnGuiaRapida', key: 'guia_rapida'},
+                                    {id: 'btnCompartir', key: 'compartir'}
+                                ];
+                                btns.forEach(function(b) {
+                                    var el = document.getElementById(b.id);
+                                    if (el) el.setAttribute('title', t(b.key) || el.getAttribute('title'));
+                                });
                             }
                             document.addEventListener('DOMContentLoaded', function() {
                                 traducirID();
                                 actualizarTooltipsRedes();
-                                // Si el botón Compartir se crea dinámicamente, observar cambios y traducirlo
-                                var observer = new MutationObserver(function() {
-                                    actualizarTooltipsRedes();
-                                });
+                                // Observar cambios en la barra de acciones para traducir tooltips dinámicos
                                 var actionsBar = document.querySelector('.id-actions-bar');
                                 if (actionsBar) {
+                                    var observer = new MutationObserver(function() {
+                                        setTimeout(actualizarTooltipsRedes, 50);
+                                    });
                                     observer.observe(actionsBar, { childList: true, subtree: true });
                                 }
+                                // Forzar traducción tras breve retardo para tooltips dinámicos
+                                setTimeout(actualizarTooltipsRedes, 200);
                             });
                             // Actualizar tooltips de redes sociales al cambiar idioma
                             window.addEventListener('storage', function(e) {
                                 if(e.key === 'lang') setTimeout(actualizarTooltipsRedes, 100);
                             });
+                            // Exponer función para forzar traducción desde otros scripts si es necesario
+                            window.actualizarTooltipsRedes = actualizarTooltipsRedes;
                         // Mostrar modal de cumpleaños si hoy es el cumpleaños del usuario
                         document.addEventListener('DOMContentLoaded', function() {
                             try {
