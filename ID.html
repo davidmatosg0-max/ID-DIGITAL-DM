@@ -187,14 +187,16 @@
         .id-info {
             width: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             margin-bottom: 18px;
         }
         .id-details {
             display: flex;
             flex-direction: column;
             gap: 4px;
+            align-items: center;
         }
         .id-name {
             font-size: 1.2em;
@@ -209,12 +211,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-top: 12px;
         }
         .id-photo-section img {
             box-shadow: 0 2px 8px #0001;
+            width: 140px !important;
+            height: 140px !important;
+            border-radius: 20px !important;
         }
         .id-qr-section {
-            margin: 18px 0 0 0;
+            margin: 48px 0 0 0;
             display: flex;
             justify-content: center;
         }
@@ -222,7 +228,7 @@
             display: flex;
             justify-content: center;
             gap: 18px;
-            margin-top: 18px;
+            margin-top: 48px;
         }
         .id-social-section a {
             background: #f4f4f4;
@@ -398,7 +404,7 @@
             <div class="id-qr-section">
                 <img id="qr" src="#" alt="QR Code" style="background:#fff;padding:8px;border-radius:12px;width:180px;height:180px;">
             </div>
-            <div class="id-social-section" style="display:flex;justify-content:center;gap:18px;margin-top:18px;">
+            <div class="id-social-section" style="display:flex;justify-content:center;gap:18px;margin-top:48px;">
                 <a id="whatsapp" href="#" target="_blank" title="Whatsapp" style="color:#25D366;font-size:1.6em;display:none;"><i class="fab fa-whatsapp"></i></a>
                 <a id="telefono" href="#" target="_blank" title="Teléfono" style="color:#2196F3;font-size:1.6em;display:none;"><i class="fas fa-phone"></i></a>
                 <a id="email" href="#" target="_blank" title="Email" style="color:#FF9800;font-size:1.6em;display:none;"><i class="fas fa-envelope"></i></a>
@@ -462,8 +468,38 @@
                                     if (el) el.title = t(r.key);
                                 });
                             }
+                            function actualizarTooltipsRedes() {
+                                var redes = [
+                                    {id: 'whatsapp', key: 'whatsapp'},
+                                    {id: 'telefono', key: 'telefono'},
+                                    {id: 'email', key: 'email'},
+                                    {id: 'facebook', key: 'facebook'},
+                                    {id: 'instagram', key: 'instagram'},
+                                    {id: 'linkedin', key: 'linkedin'}
+                                ];
+                                redes.forEach(function(r) {
+                                    var el = document.getElementById(r.id);
+                                    if (el) el.title = t(r.key);
+                                });
+                                // Traducir botón Compartir si existe
+                                var btnCompartir = document.getElementById('btnCompartir');
+                                if (btnCompartir) btnCompartir.title = t('compartir') || 'Compartir';
+                            }
                             document.addEventListener('DOMContentLoaded', function() {
                                 traducirID();
+                                actualizarTooltipsRedes();
+                                // Si el botón Compartir se crea dinámicamente, observar cambios y traducirlo
+                                var observer = new MutationObserver(function() {
+                                    actualizarTooltipsRedes();
+                                });
+                                var actionsBar = document.querySelector('.id-actions-bar');
+                                if (actionsBar) {
+                                    observer.observe(actionsBar, { childList: true, subtree: true });
+                                }
+                            });
+                            // Actualizar tooltips de redes sociales al cambiar idioma
+                            window.addEventListener('storage', function(e) {
+                                if(e.key === 'lang') setTimeout(actualizarTooltipsRedes, 100);
                             });
                         // Mostrar modal de cumpleaños si hoy es el cumpleaños del usuario
                         document.addEventListener('DOMContentLoaded', function() {
@@ -495,6 +531,14 @@
                     document.body.style.background = `linear-gradient(135deg, ${savedColors.c1} 0%, ${savedColors.c2} 100%)`;
                     document.getElementById('color1').value = savedColors.c1;
                     document.getElementById('color2').value = savedColors.c2;
+                    // Sincronizar color de cabecera
+                    document.querySelectorAll('.id-header').forEach(function(header){
+                        header.style.background = savedColors.c1;
+                    });
+                } else {
+                    document.querySelectorAll('.id-header').forEach(function(header){
+                        header.style.background = '#2176d2';
+                    });
                 }
             });
             // Botón para abrir el modal de selección de colores
@@ -512,6 +556,10 @@
                 const c2 = document.getElementById('color2').value;
                 document.body.style.background = `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
                 localStorage.setItem('customColors', JSON.stringify({c1, c2}));
+                // Sincronizar color de cabecera
+                document.querySelectorAll('.id-header').forEach(function(header){
+                    header.style.background = c1;
+                });
                 document.getElementById('colorModal').style.display = 'none';
             };
             // Botón cerrar modal sin guardar
@@ -528,8 +576,23 @@
                         el.style.background = '#23272b';
                         el.style.color = '#eee';
                     });
+                    // Cabecera en modo oscuro
+                    document.querySelectorAll('.id-header').forEach(function(header){
+                        header.style.background = '#23272b';
+                    });
                 } else {
                     body.classList.remove('modo-oscuro');
+                    // Restaurar color personalizado o por defecto
+                    const savedColors = JSON.parse(localStorage.getItem('customColors') || 'null');
+                    if (savedColors && savedColors.c1) {
+                        document.querySelectorAll('.id-header').forEach(function(header){
+                            header.style.background = savedColors.c1;
+                        });
+                    } else {
+                        document.querySelectorAll('.id-header').forEach(function(header){
+                            header.style.background = '#2176d2';
+                        });
+                    }
                     body.style.background = 'linear-gradient(135deg, #2176d2 0%, #25D366 100%)';
                     document.querySelectorAll('.id-card, .id-card *').forEach(el => {
                         el.style.background = '';
