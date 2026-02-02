@@ -88,8 +88,14 @@
               margin-bottom: 0;
         }
         .profile-preview-container img {
-            max-width: 120px;
-            border-radius: 10px;
+            max-width: 140px;
+            max-height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            image-rendering: crisp-edges;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            background: #fff;
             box-shadow: 0 2px 8px #0001;
         }
         @media (max-width: 480px) {
@@ -107,12 +113,12 @@
 <body>
     <div class="profile-container">
         <div id="empresaLogoPreview" style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:18px;">
-            <img id="empresaLogoImg" src="#" alt="Logo Empresa" style="display:none;max-height:48px;max-width:80px;border-radius:8px;background:#fff;"/>
+            <img id="empresaLogoImg" src="#" alt="Logo Empresa" style="display:none;max-height:48px;max-width:80px;border-radius:8px;background:#fff;object-fit:cover;aspect-ratio:1/1;image-rendering:auto;"/>
             <span id="empresaNombrePreview" style="font-size:1.3em;font-weight:bold;"></span>
         </div>
         <h2 style="margin-top:0;"><script>document.write(t('perfil'))</script></h2>
         <div class="profile-preview-container" style="margin-bottom:18px;">
-            <img id="profilePreview" src="#" alt="Previsualización" style="display:none; max-width:120px; border-radius:10px;"/>
+            <img id="profilePreview" src="#" alt="Previsualización" style="display:none; max-width:120px; border-radius:10px; object-fit:cover; aspect-ratio:1/1; image-rendering:auto;"/>
         </div>
         <form id="profileForm">
             <label for="profileEmpresa"><script>document.write(t('empresa'))</script>:</label><br>

@@ -215,6 +215,9 @@
         }
         .id-photo-section img {
             box-shadow: 0 2px 8px #0001;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            image-rendering: auto;
             width: 140px !important;
             height: 140px !important;
             border-radius: 20px !important;
@@ -800,4 +803,38 @@
     traducirID();
     </script>
 </body>
+
+<!-- Botón flotante de Guía Rápida -->
+
+<!-- Selector de idioma flotante -->
+<div id="selectorIdiomaFlotante" style="position:fixed;bottom:24px;right:24px;z-index:9999;background:#FFC107;border-radius:50px;box-shadow:0 4px 16px #0004;padding:8px 18px;display:flex;align-items:center;gap:8px;">
+    <label for="idiomaFlotante" style="color:#fff;font-weight:bold;font-size:1.1em;margin:0;cursor:pointer;">🌐</label>
+    <select id="idiomaFlotante" style="border:none;border-radius:8px;padding:6px 10px;font-size:1em;outline:none;">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <!-- Agrega más idiomas si es necesario -->
+    </select>
+</div>
+<script>
+    // Sincronizar selector con idioma actual
+    function getLangActual() {
+        return (typeof getLang === 'function') ? getLang() : (localStorage.getItem('lang') || 'es');
+    }
+    function setLangActual(lang) {
+        localStorage.setItem('lang', lang);
+        window.dispatchEvent(new Event('storage'));
+    }
+    var sel = document.getElementById('idiomaFlotante');
+    if(sel) {
+        sel.value = getLangActual();
+        sel.onchange = function() {
+            setLangActual(this.value);
+        };
+        // Actualizar el valor si cambia desde otro lugar
+        window.addEventListener('storage', function() {
+            sel.value = getLangActual();
+        });
+    }
+</script>
 </html>

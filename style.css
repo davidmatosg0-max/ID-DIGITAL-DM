@@ -1,6 +1,11 @@
+    max-width: 140px;
+    max-height: 140px;
+    border-radius: 50% !important;
     object-fit: cover;
-    image-rendering: auto;
     aspect-ratio: 1/1;
+    image-rendering: crisp-edges;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    background: #fff;
 /* Responsive para pantallas móviles */
 @media (max-width: 480px) {
     .id-card-container {
