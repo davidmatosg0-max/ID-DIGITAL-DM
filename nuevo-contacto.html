@@ -144,10 +144,36 @@
              <input type="date" id="profileNacimiento" name="profileNacimiento"><br><br>
              <div class="desc-campo"><small id="desc_nacimiento"></small></div>
 
-            <button type="button" id="btnCargarEjemploContacto" style="background:#2176d2;color:#fff;margin-bottom:10px;">Subir ejemplo</button>
             <button type="submit"><script>document.write(t('guardar'))</script></button>
+            <button type="button" id="btnCerrarNuevoContacto" style="background:#bbb;color:#333;margin-top:4px;"><script>document.write(typeof t==='function'?t('cerrar'):'Cerrar')</script></button>
         </form>
         <script src="lang.js"></script>
+        <script>
+        function traducirCerrarBtn() {
+            var btnCerrar = document.getElementById('btnCerrarNuevoContacto');
+            if(btnCerrar && typeof t==='function') btnCerrar.textContent = t('cerrar');
+        }
+        document.getElementById('btnCerrarNuevoContacto').onclick = function() {
+            window.location.href = 'contactos.html';
+        };
+        // Traducir al cargar y al cambiar idioma
+        traducirCerrarBtn();
+        document.addEventListener('idioma-cambiado', traducirCerrarBtn);
+        window.addEventListener('storage', function(e) {
+            if(e.key==='lang') setTimeout(traducirCerrarBtn, 100);
+        });
+        // Parchear setLang para emitir evento personalizado si no existe
+        if (typeof window.setLang === 'function' && !window._setLangPatchedCerrarBtn) {
+            var originalSetLangCerrarBtn = window.setLang;
+            window.setLang = function(lang) {
+                originalSetLangCerrarBtn.apply(this, arguments);
+                setTimeout(function(){
+                    document.dispatchEvent(new Event('idioma-cambiado'));
+                }, 50);
+            };
+            window._setLangPatchedCerrarBtn = true;
+        }
+        </script>
         <script>
         function traducirNuevoContacto() {
             if(window.t) {
