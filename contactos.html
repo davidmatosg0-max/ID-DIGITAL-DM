@@ -1,3 +1,97 @@
+</div>
+<!-- Modal Guía Rápida -->
+<div id="modalGuiaRapida" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:5000;align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:left;position:relative;display:flex;flex-direction:column;align-items:center;">
+        <div style="font-size:2em;color:#2176d2;margin-bottom:10px;"><i class='fa-solid fa-circle-info'></i></div>
+        <div id="txtGuiaRapida" style="font-size:1.05em;line-height:1.5;margin-bottom:18px;text-align:left;max-height:320px;overflow:auto;"></div>
+        <button id="btnCerrarGuiaRapida" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;">Cerrar</button>
+    </div>
+</div>
+<button id="btnGuiaRapida" title="Guía rápida" style="position:fixed;bottom:100px;right:24px;z-index:9999;background:#2176d2;color:#fff;border:none;border-radius:50%;width:54px;height:54px;font-size:1.5em;box-shadow:0 4px 16px #0004;cursor:pointer;"><i class="fa-solid fa-circle-info"></i></button>
+<script>
+// Guía rápida multilingüe
+function getGuiaRapida(lang) {
+    switch(lang) {
+        case 'en':
+            return `
+1. <b>Manage your contacts</b> from the agenda:<br>
+&nbsp;&nbsp;- Add, edit, delete, and search contacts.<br>
+&nbsp;&nbsp;- Import from your mobile or export to CSV.<br><br>
+2. <b>View, share, or scan contacts</b> using the action buttons.<br><br>
+3. <b>Get birthday notifications</b> for your contacts and congratulate them quickly.<br><br>
+4. <b>Return to your digital ID</b> with the home button.<br><br>
+5. <b>Change language</b> at any time; everything updates instantly.<br><br>
+Done! Your contacts always organized, easy to share and multilingual.`;
+        case 'fr':
+            return `
+1. <b>Gérez vos contacts</b> depuis l'agenda :<br>
+&nbsp;&nbsp;- Ajoutez, modifiez, supprimez et recherchez des contacts.<br>
+&nbsp;&nbsp;- Importez depuis votre mobile ou exportez en CSV.<br><br>
+2. <b>Consultez, partagez ou scannez des contacts</b> avec les boutons d'action.<br><br>
+3. <b>Recevez des notifications d'anniversaire</b> de vos contacts et félicitez-les rapidement.<br><br>
+4. <b>Revenez à votre carte d'identité</b> avec le bouton d'accueil.<br><br>
+5. <b>Changez de langue</b> à tout moment ; tout se met à jour instantanément.<br><br>
+Prêt ! Vos contacts toujours organisés, faciles à partager et multilingues.`;
+        default:
+            return `
+1. <b>Gestiona tus contactos</b> desde la agenda:<br>
+&nbsp;&nbsp;- Agrega, edita, elimina y busca contactos.<br>
+&nbsp;&nbsp;- Importa desde tu móvil o exporta a CSV.<br><br>
+2. <b>Consulta, comparte o escanea contactos</b> con los botones de acción.<br><br>
+3. <b>Recibe avisos de cumpleaños</b> de tus contactos y felicítalos rápido.<br><br>
+4. <b>Vuelve a tu ID digital</b> con el botón de inicio.<br><br>
+5. <b>Cambia de idioma</b> en cualquier momento; todo se actualiza al instante.<br><br>
+¡Listo! Tus contactos siempre organizados, fáciles de compartir y multilingües.`;
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    var btnGuia = document.getElementById('btnGuiaRapida');
+    var modalGuia = document.getElementById('modalGuiaRapida');
+    var txtGuia = document.getElementById('txtGuiaRapida');
+    var btnCerrarGuia = document.getElementById('btnCerrarGuiaRapida');
+    function mostrarGuia() {
+        var lang = (typeof getLang === 'function') ? getLang() : (localStorage.getItem('lang') || 'es');
+        if (!['es','en','fr'].includes(lang)) lang = 'es';
+        txtGuia.innerHTML = getGuiaRapida(lang);
+        modalGuia.style.display = 'flex';
+        modalGuia.style.alignItems = 'center';
+        modalGuia.style.justifyContent = 'center';
+    }
+    if(btnGuia && modalGuia && txtGuia && btnCerrarGuia) {
+        btnGuia.onclick = mostrarGuia;
+        btnCerrarGuia.onclick = function() {
+            modalGuia.style.display = 'none';
+        };
+    }
+    // Refrescar guía automáticamente al cambiar idioma (local y entre pestañas)
+    function refrescarGuiaSiVisible() {
+        if(modalGuia.style.display === 'flex') mostrarGuia();
+    }
+    // Cambios de idioma en la misma pestaña y entre pestañas
+    document.addEventListener('idioma-cambiado', refrescarGuiaSiVisible);
+    window.addEventListener('storage', function(e) {
+        if(e.key === 'lang') setTimeout(refrescarGuiaSiVisible, 100);
+    });
+    // Parchear setLang para emitir evento personalizado
+    if (typeof window.setLang === 'function') {
+        var originalSetLang = window.setLang;
+        window.setLang = function(lang) {
+            originalSetLang.apply(this, arguments);
+            setTimeout(function(){
+                document.dispatchEvent(new Event('idioma-cambiado'));
+            }, 50);
+        };
+    } else {
+        // fallback: observar cambios manuales en el selector
+        var selector = document.getElementById('selectorIdioma');
+        if(selector) selector.addEventListener('change', function(){
+            setTimeout(function(){
+                document.dispatchEvent(new Event('idioma-cambiado'));
+            }, 50);
+        });
+    }
+});
+</script>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -151,7 +245,8 @@
         const contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
         const hoy = new Date();
         const hoyMesDia = (hoy.getMonth()+1).toString().padStart(2,'0') + '-' + hoy.getDate().toString().padStart(2,'0');
-        let cumpleaneros = contactos.filter(c => c.nacimiento && c.nacimiento.slice(5) === hoyMesDia);
+        // Solo mostrar si HOY es el cumpleaños, no antes ni después
+        let cumpleaneros = contactos.filter(c => c.nacimiento && c.nacimiento.slice(5,10) === hoyMesDia);
         if(cumpleaneros.length > 0) {
             let nombres = cumpleaneros.map(c => c.nombre || t('contacto')).join(', ');
             // Modal moderno
@@ -251,6 +346,16 @@
                                         if(code.data.includes('BEGIN:VCARD')) {
                                             const contacto = parseVCard(code.data);
                                             let contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                                            // Evitar duplicados por nombre y teléfono/email
+                                            const existe = contactos.some(c => 
+                                                (c.nombre && contacto.nombre && c.nombre.trim().toLowerCase() === contacto.nombre.trim().toLowerCase()) &&
+                                                ((c.telefono && contacto.telefono && c.telefono === contacto.telefono) || (c.email && contacto.email && c.email === contacto.email))
+                                            );
+                                            if (existe) {
+                                                qrStatus.textContent = 'Contacto duplicado. No se agregó.';
+                                                setTimeout(()=>{modalScanQR.style.display='none';}, 1500);
+                                                return;
+                                            }
                                             contactos.push(contacto);
                                             localStorage.setItem('contactos', JSON.stringify(contactos));
                                             qrStatus.textContent = '¡Contacto agregado!';

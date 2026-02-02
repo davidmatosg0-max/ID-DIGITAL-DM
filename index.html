@@ -1,3 +1,99 @@
+<!-- Modal Guía Rápida -->
+<div id="modalGuiaRapida" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:5000;align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:left;position:relative;display:flex;flex-direction:column;align-items:center;">
+        <div style="font-size:2em;color:#2176d2;margin-bottom:10px;"><i class='fa-solid fa-circle-info'></i></div>
+        <div id="txtGuiaRapida" style="font-size:1.05em;line-height:1.5;margin-bottom:18px;text-align:left;max-height:320px;overflow:auto;"></div>
+        <button id="btnCerrarGuiaRapida" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;">Cerrar</button>
+    </div>
+</div>
+<button id="btnGuiaRapida" title="Guía rápida" style="position:fixed;bottom:100px;right:24px;z-index:9999;background:#2176d2;color:#fff;border:none;border-radius:50%;width:54px;height:54px;font-size:1.5em;box-shadow:0 4px 16px #0004;cursor:pointer;"><i class="fa-solid fa-circle-info"></i></button>
+<script>
+// Guía rápida multilingüe
+function getGuiaRapida(lang) {
+    switch(lang) {
+        case 'en':
+            return `
+1. <b>Select your language</b> on the welcome screen. Everything translates automatically.<br><br>
+2. <b>Create or edit your profile</b> with your data, photo, and logo. Use the pencil button to edit.<br><br>
+3. <b>Share your card</b> with the share button:<br>
+&nbsp;&nbsp;- On mobile: use the native menu (WhatsApp, Email, etc.).<br>
+&nbsp;&nbsp;- On PC: copy and paste the data from the modal.<br><br>
+4. <b>Manage your contacts</b> from the agenda:<br>
+&nbsp;&nbsp;- Add, edit, delete, and search contacts.<br>
+&nbsp;&nbsp;- Import from your mobile or export to CSV.<br><br>
+5. <b>Customize colors and dark mode</b> with the top bar buttons.<br><br>
+6. <b>Get birthday notifications</b> for your contacts and congratulate them quickly.<br><br>
+Done! Your identity and contacts always at hand, easy to share and multilingual.`;
+        case 'fr':
+            return `
+1. <b>Sélectionnez votre langue</b> sur l'écran d'accueil. Tout est traduit automatiquement.<br><br>
+2. <b>Créez ou modifiez votre profil</b> avec vos données, photo et logo. Utilisez le bouton crayon pour modifier.<br><br>
+3. <b>Partagez votre carte</b> avec le bouton de partage :<br>
+&nbsp;&nbsp;- Sur mobile : utilisez le menu natif (WhatsApp, Email, etc.).<br>
+&nbsp;&nbsp;- Sur PC : copiez et collez les données depuis la fenêtre.<br><br>
+4. <b>Gérez vos contacts</b> depuis l'agenda :<br>
+&nbsp;&nbsp;- Ajoutez, modifiez, supprimez et recherchez des contacts.<br>
+&nbsp;&nbsp;- Importez depuis votre mobile ou exportez en CSV.<br><br>
+5. <b>Personnalisez les couleurs et le mode sombre</b> avec les boutons de la barre supérieure.<br><br>
+6. <b>Recevez des notifications d'anniversaire</b> de vos contacts et félicitez-les rapidement.<br><br>
+Prêt ! Votre identité et vos contacts toujours à portée de main, facile à partager et multilingue.`;
+        default:
+            return `
+1. <b>Selecciona tu idioma</b> en la pantalla de inicio. Todo se traduce automáticamente.<br><br>
+2. <b>Crea o edita tu perfil</b> con tus datos, foto y logo. Usa el botón de lápiz para editar.<br><br>
+3. <b>Comparte tu tarjeta</b> con el botón de compartir:<br>
+&nbsp;&nbsp;- En móvil: usa el menú nativo (WhatsApp, Email, etc.).<br>
+&nbsp;&nbsp;- En PC: copia y pega los datos desde el modal.<br><br>
+4. <b>Gestiona tus contactos</b> desde la agenda:<br>
+&nbsp;&nbsp;- Agrega, edita, elimina y busca contactos.<br>
+&nbsp;&nbsp;- Importa desde tu móvil o exporta a CSV.<br><br>
+5. <b>Personaliza colores y modo oscuro</b> con los botones de la barra superior.<br><br>
+6. <b>Recibe avisos de cumpleaños</b> de tus contactos y felicítalos rápido.<br><br>
+¡Listo! Tu identidad y contactos siempre a mano, fácil de compartir y multilingüe.`;
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    var btnGuia = document.getElementById('btnGuiaRapida');
+    var modalGuia = document.getElementById('modalGuiaRapida');
+    var txtGuia = document.getElementById('txtGuiaRapida');
+    var btnCerrarGuia = document.getElementById('btnCerrarGuiaRapida');
+    function mostrarGuia() {
+        var lang = (typeof getLang === 'function') ? getLang() : 'es';
+        txtGuia.innerHTML = getGuiaRapida(lang);
+        modalGuia.style.display = 'flex';
+        modalGuia.style.alignItems = 'center';
+        modalGuia.style.justifyContent = 'center';
+    }
+    if(btnGuia && modalGuia && txtGuia && btnCerrarGuia) {
+        btnGuia.onclick = mostrarGuia;
+        btnCerrarGuia.onclick = function() {
+            modalGuia.style.display = 'none';
+        };
+    }
+    // Refrescar guía automáticamente al cambiar idioma (local y entre pestañas)
+    function refrescarGuiaSiVisible() {
+        if(modalGuia.style.display === 'flex') mostrarGuia();
+    }
+    // Cambios de idioma en la misma pestaña
+    if (typeof window.setLang === 'function') {
+        var originalSetLang = window.setLang;
+        window.setLang = function(lang) {
+            originalSetLang.apply(this, arguments);
+            setTimeout(refrescarGuiaSiVisible, 50);
+        };
+    } else {
+        // fallback: observar cambios manuales en el selector
+        var selector = document.getElementById('selectorIdioma');
+        if(selector) selector.addEventListener('change', function(){
+            setTimeout(refrescarGuiaSiVisible, 50);
+        });
+    }
+    // Cambios de idioma en otras pestañas
+    window.addEventListener('storage', function(e) {
+        if(e.key === 'lang') setTimeout(refrescarGuiaSiVisible, 100);
+    });
+});
+</script>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -211,12 +307,16 @@
                     window.addEventListener('storage', function(e) {
                         if(e.key === 'lang') setTimeout(traducirDescargaApp, 100);
                     });
-                    // Recargar la página al cambiar el selector de idioma
+                    // Sincronizar idioma y recargar usando setLang para garantizar traducción y persistencia
                     var selector = document.getElementById('selectorIdioma');
                     if(selector) {
                         selector.addEventListener('change', function() {
-                            localStorage.setItem('lang', this.value);
-                            location.reload();
+                            if(typeof setLang === 'function') {
+                                setLang(this.value);
+                            } else {
+                                localStorage.setItem('lang', this.value);
+                                location.reload();
+                            }
                         });
                     }
                 });
@@ -229,12 +329,45 @@
         <button class="main-btn" onclick="window.location.href='ID.html'">
             <i class="fa-solid fa-arrow-right"></i> <span id="txtEmpezar"><script>document.write(t('empezar'))</script></span>
         </button>
-        <select id="selectorIdioma" style="margin-top:18px;padding:4px 8px;border-radius:6px;width:120px;">
-            <option value="es">ES</option>
-            <option value="en">EN</option>
-            <option value="fr">FR</option>
-        </select>
     </div>
+
+<!-- Selector de idioma flotante sincronizado -->
+<div id="selectorIdiomaFlotante" style="position:fixed;bottom:24px;right:24px;z-index:9999;background:#2176d2;border-radius:50px;box-shadow:0 4px 16px #0004;padding:8px 18px;display:flex;align-items:center;gap:8px;">
+    <label for="idiomaFlotante" style="color:#fff;font-weight:bold;font-size:1.1em;margin:0;cursor:pointer;">🌐</label>
+    <select id="idiomaFlotante" style="border:none;border-radius:8px;padding:6px 10px;font-size:1em;outline:none;">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+    </select>
+</div>
+<script>
+    // Sincronizar selector con idioma actual y memorizar siempre el último idioma seleccionado
+    function getLangActual() {
+        return localStorage.getItem('lang') || 'es';
+    }
+    function setLangActual(lang) {
+        localStorage.setItem('lang', lang);
+        if(typeof t === 'function' && typeof traducirBienvenida === 'function') {
+            traducirBienvenida();
+        }
+        window.dispatchEvent(new Event('storage'));
+    }
+    var sel = document.getElementById('idiomaFlotante');
+    if(sel) {
+        // Al cargar, aplicar el idioma guardado
+        sel.value = getLangActual();
+        if(typeof setLang === 'function') setLang(sel.value);
+        sel.onchange = function() {
+            setLangActual(this.value);
+            if(typeof setLang === 'function') setLang(this.value);
+        };
+        // Actualizar el valor si cambia desde otro lugar
+        window.addEventListener('storage', function() {
+            sel.value = getLangActual();
+            if(typeof setLang === 'function') setLang(sel.value);
+        });
+    }
+</script>
         <script>
 
                 // Mostrar modal de sugerencia de instalación si es posible
@@ -368,8 +501,8 @@
             const selector = document.getElementById('selectorIdioma');
             selector.value = getLang();
             selector.onchange = function() {
-                setLang(this.value);
-                setTimeout(traducirBienvenida, 100); // Forzar traducción tras reload o cambio
+                localStorage.setItem('lang', this.value);
+                traducirBienvenida();
             };
         });
     </script>
@@ -395,5 +528,70 @@
     };
 </script>
 </body>
+
+
+<script>
+(function prepararAlertaCumpleIndex() {
+    function preparar() {
+        const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+        if (data && data.nacimiento && typeof data.nacimiento === 'string' && data.nacimiento.length >= 10) {
+            const hoy = new Date();
+            const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+            const dia = hoy.getDate().toString().padStart(2, '0');
+            const hoyMesDia = mes + '-' + dia;
+            if (data.nacimiento.slice(5, 10) === hoyMesDia) {
+                // Mostrar icono flotante
+                var icono = document.getElementById('iconoCumpleIndex');
+                if(icono) icono.style.display = 'flex';
+                // Preparar modal
+                let mensaje = '';
+                let nombre = data.nombre || '';
+                if (typeof t === 'function') {
+                    if (getLang && getLang() === 'en') {
+                        mensaje = `🎉 <b>Today is the birthday of:</b><br>${nombre}`;
+                    } else if (getLang && getLang() === 'fr') {
+                        mensaje = `🎉 <b>Aujourd'hui c'est l'anniversaire de :</b><br>${nombre}`;
+                    } else {
+                        mensaje = `🎉 <b>Hoy es el cumpleaños de:</b><br>${nombre}`;
+                    }
+                } else {
+                    mensaje = `🎉 <b>Hoy es el cumpleaños de:</b><br>${nombre}`;
+                }
+                var msgDiv = document.getElementById('msgCumpleIndex');
+                var accionesDiv = document.getElementById('accionesCumpleIndex');
+                var modal = document.getElementById('modalCumpleIndex');
+                var btnCerrar = document.getElementById('cerrarModalCumpleIndex');
+                if (msgDiv && accionesDiv && modal && btnCerrar) {
+                    msgDiv.innerHTML = mensaje;
+                    let acciones = '';
+                    if(data.whatsapp) {
+                        let msg = encodeURIComponent((typeof t==='function'?t('feliz_cumple'):'¡Feliz cumpleaños!') + ' ' + nombre);
+                        let num = data.whatsapp.replace(/[^0-9]/g, '');
+                        acciones += `<a href='https://wa.me/${num}?text=${msg}' target='_blank' style='background:#25D366;color:#fff;padding:10px 18px;border-radius:8px;margin:4px 2px;display:inline-block;text-decoration:none;font-weight:bold;font-size:1.1em;'><i class='fa-brands fa-whatsapp'></i> WhatsApp ${nombre}</a>`;
+                    }
+                    if(data.email) {
+                        let subject = encodeURIComponent((typeof t==='function'?t('feliz_cumple'):'Feliz cumpleaños'));
+                        let body = encodeURIComponent((typeof t==='function'?t('feliz_cumple'):'Feliz cumpleaños') + ' ' + nombre);
+                        acciones += `<a href='mailto:${data.email}?subject=${subject}&body=${body}' style='background:#2176d2;color:#fff;padding:10px 18px;border-radius:8px;margin:4px 2px;display:inline-block;text-decoration:none;font-weight:bold;font-size:1.1em;'><i class='fa-solid fa-envelope'></i> Email ${nombre}</a>`;
+                    }
+                    accionesDiv.innerHTML = acciones;
+                    // Click en icono muestra modal
+                    if(icono) icono.onclick = function() {
+                        modal.style.display = 'flex';
+                    };
+                    btnCerrar.onclick = function() {
+                        modal.style.display = 'none';
+                    };
+                }
+            }
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', preparar);
+    } else {
+        setTimeout(preparar, 50);
+    }
+})();
+</script>
 </html>
 

@@ -79,6 +79,7 @@ const LANGS = {
     soloDisponibleMovil: "Contact import is only available on some mobile browsers."
   },
   fr: {
+    cerrar: "Fermer",
           feliz_cumple: "C'est l'anniversaire de",
         fecha_nacimiento: "Date de naissance",
         fecha_nacimiento_desc: "Sélectionnez la date de naissance. Elle sera utilisée pour les rappels d'anniversaire.",

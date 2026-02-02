@@ -1,3 +1,41 @@
+            <style>
+            /* Toast notification */
+            #toastNoti {
+                visibility: hidden;
+                min-width: 220px;
+                background: #25D366;
+                color: #fff;
+                text-align: center;
+                border-radius: 8px;
+                padding: 14px 24px;
+                position: fixed;
+                z-index: 5000;
+                left: 50%;
+                bottom: 80px;
+                font-size: 1.1em;
+                transform: translateX(-50%);
+                box-shadow: 0 2px 12px #0003;
+                opacity: 0;
+                transition: opacity 0.4s, visibility 0.4s;
+            }
+            #toastNoti.show {
+                visibility: visible;
+                opacity: 1;
+            }
+            </style>
+            <!-- Ejemplo de notificación tipo toast -->
+            <div id="toastNoti">🎉 ¡Ejemplo de notificación de cumpleaños!</div>
+        <style>
+        /* Animación de pulso para el botón de cumpleaños */
+        @keyframes cumple-pulse {
+            0% { box-shadow: 0 0 0 0 #25d36688; }
+            70% { box-shadow: 0 0 0 16px #25d36600; }
+            100% { box-shadow: 0 0 0 0 #25d36600; }
+        }
+        .cumple-anim {
+            animation: cumple-pulse 1.2s infinite;
+        }
+        </style>
     <!-- Botón Compartir recreado dinámicamente -->
         <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -434,6 +472,13 @@
             </div>
         </div>
     </div>
+    <!-- Botón flotante de cumpleaños SIEMPRE visible -->
+    <div id="btnCumpleFloating" style="display:flex;position:fixed;bottom:32px;left:24px;z-index:3500;width:64px;height:64px;background:linear-gradient(135deg,#25D366 60%,#43e97b 100%);border-radius:50%;box-shadow:0 4px 18px #25d36655,0 1.5px 8px #0002;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow 0.2s;">
+        <i class="fa-solid fa-cake-candles" style="color:#fff;font-size:2.2em;"></i>
+        <div id="toastNotiContactos" style="visibility:hidden;min-width:180px;background:#25D366;color:#fff;text-align:center;border-radius:8px;padding:8px 16px;position:absolute;z-index:3600;left:50%;bottom:80px;font-size:0.98em;transform:translateX(-50%);box-shadow:0 2px 12px #0003;opacity:0;transition:opacity 0.4s,visibility 0.4s;"></div>
+    </div>
+        </div>
+    </div>
     <script>
                                 // Traducción dinámica de los botones del modal de color
                                 function traducirModalColores() {
@@ -519,25 +564,173 @@
                             // Exponer función para forzar traducción desde otros scripts si es necesario
                             window.actualizarTooltipsRedes = actualizarTooltipsRedes;
                         // Mostrar modal de cumpleaños si hoy es el cumpleaños del usuario
-                        document.addEventListener('DOMContentLoaded', function() {
+                        function activarBotonCumple() {
                             try {
                                 const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+                                var btnCumple = document.getElementById('btnCumpleFloating');
+                                var modalCumple = document.getElementById('modalCumple');
+                                var cerrarModalCumple = document.getElementById('cerrarModalCumple');
+                                var msgCumple = document.getElementById('msgCumple');
+                                let esCumple = false;
                                 if (data && data.nacimiento && typeof data.nacimiento === 'string' && data.nacimiento.length >= 10) {
                                     const hoy = new Date();
                                     const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
                                     const dia = hoy.getDate().toString().padStart(2, '0');
                                     const hoyMesDia = mes + '-' + dia;
-                                    // data.nacimiento formato 'YYYY-MM-DD'
                                     if (data.nacimiento.slice(5, 10) === hoyMesDia) {
-                                        document.getElementById('msgCumple').innerHTML = `<b>🎉 ${t('feliz_cumple')}!</b><br>${data.nombre ? data.nombre : ''}`;
-                                        document.getElementById('modalCumple').style.display = 'flex';
-                                        document.getElementById('cerrarModalCumple').onclick = function() {
-                                            document.getElementById('modalCumple').style.display = 'none';
-                                        };
+                                        esCumple = true;
                                     }
                                 }
+                                if(btnCumple) {
+                                    btnCumple.style.display = 'flex';
+                                    if(esCumple) {
+                                        btnCumple.classList.add('cumple-anim');
+                                    } else {
+                                        btnCumple.classList.remove('cumple-anim');
+                                    }
+                                    function mostrarCumpleContactos() {
+                                                                // Mostrar notificación de cumpleaños de contactos al cargar la página
+                                                                document.addEventListener('DOMContentLoaded', function() {
+                                                                    var toastContactos = document.getElementById('toastNotiContactos');
+                                                                    let contactos = [];
+                                                                    try {
+                                                                        contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                                                                    } catch(e) { contactos = []; }
+                                                                    const hoy = new Date();
+                                                                    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+                                                                    const dia = hoy.getDate().toString().padStart(2, '0');
+                                                                    const hoyMesDia = mes + '-' + dia;
+                                                                    let cumpleaneros = contactos.filter(c => c.nacimiento && c.nacimiento.slice(5,10) === hoyMesDia);
+                                                                    if (toastContactos && cumpleaneros.length > 0) {
+                                                                        let nombres = cumpleaneros.map(c => {
+                                                                            let nombreCompleto = c.nombre || '';
+                                                                            if (c.apellidos) nombreCompleto += ' ' + c.apellidos;
+                                                                            if (!nombreCompleto.trim()) nombreCompleto = (typeof t==='function'?t('contacto'):'Contacto');
+                                                                            return nombreCompleto;
+                                                                        }).join(', ');
+                                                                        toastContactos.textContent = `${typeof t==='function'?t('feliz_cumple'):'¡Feliz cumpleaños'}: ${nombres}`;
+                                                                        toastContactos.style.visibility = 'visible';
+                                                                        toastContactos.style.opacity = '1';
+                                                                        setTimeout(function(){
+                                                                            toastContactos.style.opacity = '0';
+                                                                            toastContactos.style.visibility = 'hidden';
+                                                                        }, 3000);
+                                                                    }
+                                                                });
+                                        // Mostrar notificación sobre el botón flotante si hay contactos de cumpleaños
+                                        var toastContactos = document.getElementById('toastNotiContactos');
+                                        let contactos = [];
+                                        try {
+                                            contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                                        } catch(e) { contactos = []; }
+                                        const hoy = new Date();
+                                        const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+                                        const dia = hoy.getDate().toString().padStart(2, '0');
+                                        const hoyMesDia = mes + '-' + dia;
+                                        let cumpleaneros = contactos.filter(c => c.nacimiento && c.nacimiento.slice(5,10) === hoyMesDia);
+                                        if (toastContactos) {
+                                            if (cumpleaneros.length > 0) {
+                                                let nombres = cumpleaneros.map(c => {
+                                                    let nombreCompleto = c.nombre || '';
+                                                    if (c.apellidos) nombreCompleto += ' ' + c.apellidos;
+                                                    if (!nombreCompleto.trim()) nombreCompleto = (typeof t==='function'?t('contacto'):'Contacto');
+                                                    return nombreCompleto;
+                                                }).join(', ');
+                                                toastContactos.textContent = `${typeof t==='function'?t('feliz_cumple'):'¡Feliz cumpleaños'}: ${nombres}`;
+                                                toastContactos.style.visibility = 'visible';
+                                                toastContactos.style.opacity = '1';
+                                                setTimeout(function(){
+                                                    toastContactos.style.opacity = '0';
+                                                    toastContactos.style.visibility = 'hidden';
+                                                }, 3000);
+                                            } else {
+                                                toastContactos.style.opacity = '0';
+                                                toastContactos.style.visibility = 'hidden';
+                                            }
+                                        }
+                                        if(msgCumple && modalCumple && cerrarModalCumple) {
+                                            // Buscar contactos que cumplen años hoy
+                                            let contactos = [];
+                                            try {
+                                                contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                                            } catch(e) { contactos = []; }
+                                            const hoy = new Date();
+                                            const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+                                            const dia = hoy.getDate().toString().padStart(2, '0');
+                                            const hoyMesDia = mes + '-' + dia;
+                                            let cumpleaneros = contactos.filter(c => c.nacimiento && c.nacimiento.slice(5,10) === hoyMesDia);
+                                            if (cumpleaneros.length > 0) {
+                                                let nombres = cumpleaneros.map(c => {
+                                                    let nombreCompleto = c.nombre || '';
+                                                    if (c.apellidos) nombreCompleto += ' ' + c.apellidos;
+                                                    if (!nombreCompleto.trim()) nombreCompleto = (typeof t==='function'?t('contacto'):'Contacto');
+                                                    let acciones = '';
+                                                    if (c.whatsapp) {
+                                                        let msg = encodeURIComponent(`¡${typeof t==='function'?t('feliz_cumple'):'Feliz cumpleaños'} ${nombreCompleto}!`);
+                                                        let num = c.whatsapp.replace(/[^0-9]/g, '');
+                                                        acciones += ` <a href='https://wa.me/${num}?text=${msg}' target='_blank' style='background:#25D366;color:#fff;padding:4px 10px;border-radius:8px;margin-left:6px;text-decoration:none;font-size:0.95em;'><i class='fa-brands fa-whatsapp'></i> WhatsApp</a>`;
+                                                    }
+                                                    if (c.email) {
+                                                        let subject = encodeURIComponent(typeof t==='function'?t('feliz_cumple'):'Feliz cumpleaños');
+                                                        let body = encodeURIComponent(`¡${typeof t==='function'?t('feliz_cumple'):'Feliz cumpleaños'} ${nombreCompleto}!`);
+                                                        acciones += ` <a href='mailto:${c.email}?subject=${subject}&body=${body}' style='background:#2176d2;color:#fff;padding:4px 10px;border-radius:8px;margin-left:6px;text-decoration:none;font-size:0.95em;'><i class='fa-solid fa-envelope'></i> Email</a>`;
+                                                    }
+                                                    return nombreCompleto + acciones;
+                                                }).join('<br>');
+                                                msgCumple.innerHTML = `<b>🎉 ${typeof t==='function'?t('feliz_cumple'):'¡Feliz cumpleaños'}:</b><br>${nombres}`;
+                                            } else {
+                                                msgCumple.innerHTML = `<b>🎉 ${typeof t==='function'?t('feliz_cumple'):'¡Feliz cumpleaños'}:</b><br>${typeof t==='function'?t('ningun_contacto_cumple'):'Ningún contacto cumple años hoy.'}`;
+                                            }
+                                            modalCumple.style.display = 'flex';
+                                            cerrarModalCumple.onclick = function() {
+                                                modalCumple.style.display = 'none';
+                                            };
+                                        }
+                                    }
+                                    btnCumple.onclick = function() {
+                                        if(esCumple) {
+                                            mostrarCumpleContactos();
+                                        } else {
+                                            // Mostrar toast sobre el botón si no hay cumpleaños
+                                            var toastContactos = document.getElementById('toastNotiContactos');
+                                            let contactos = [];
+                                            try {
+                                                contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+                                            } catch(e) { contactos = []; }
+                                            const hoy = new Date();
+                                            const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+                                            const dia = hoy.getDate().toString().padStart(2, '0');
+                                            const hoyMesDia = mes + '-' + dia;
+                                            let cumpleaneros = contactos.filter(c => c.nacimiento && c.nacimiento.slice(5,10) === hoyMesDia);
+                                            if (toastContactos) {
+                                                if (cumpleaneros.length === 0) {
+                                                    toastContactos.textContent = typeof t==='function'?t('ningun_contacto_cumple'):'No hay cumpleaños hoy';
+                                                    toastContactos.style.visibility = 'visible';
+                                                    toastContactos.style.opacity = '1';
+                                                    setTimeout(function(){
+                                                        toastContactos.style.opacity = '0';
+                                                        toastContactos.style.visibility = 'hidden';
+                                                    }, 2200);
+                                                }
+                                            }
+                                        }
+                                    };
+                                    // Sincronizar si cambia localStorage en otra pestaña
+                                    window.addEventListener('storage', function(e) {
+                                        if(e.key === 'contactos') {
+                                            if(document.getElementById('modalCumple') && document.getElementById('modalCumple').style.display === 'flex') {
+                                                mostrarCumpleContactos();
+                                            }
+                                        }
+                                    });
+                                }
                             } catch(e) { /* Silenciar error */ }
-                        });
+                        }
+                        if(document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', activarBotonCumple);
+                        } else {
+                            activarBotonCumple();
+                        }
                     document.getElementById('btnConfig').onclick = function() {
                         alert(t('configuracion_alerta'));
                     };
@@ -804,6 +997,77 @@
     </script>
 </body>
 
+<!-- Modal de cumpleaños en ID -->
+<div id="modalCumpleID" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:3000;align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px #0003;max-width:90vw;width:340px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;">
+        <div style="font-size:2.5em;color:#25D366;margin-bottom:10px;"><i class='fa-solid fa-cake-candles'></i></div>
+        <div id="msgCumpleID" style="font-size:1.15em;margin-bottom:22px;"></div>
+        <div id="accionesCumpleID"></div>
+        <button id="cerrarModalCumpleID" style="background:#bbb;color:#333;padding:10px 22px;border:none;border-radius:8px;font-size:1em;cursor:pointer;margin-top:18px;">Cerrar</button>
+    </div>
+</div>
+<script>
+
+// Refuerzo: Mostrar modal de cumpleaños en ID aunque el DOM tarde en cargar
+(function mostrarModalCumpleID() {
+    function mostrar() {
+        const data = JSON.parse(localStorage.getItem('profileData') || '{}');
+        if (data && data.nacimiento && typeof data.nacimiento === 'string' && data.nacimiento.length >= 10) {
+            const hoy = new Date();
+            const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+            const dia = hoy.getDate().toString().padStart(2, '0');
+            const hoyMesDia = mes + '-' + dia;
+            if (data.nacimiento.slice(5, 10) === hoyMesDia) {
+                let mensaje = '';
+                let nombre = data.nombre || '';
+                if (typeof t === 'function') {
+                    if (getLang && getLang() === 'en') {
+                        mensaje = `🎉 <b>Today is the birthday of:</b><br>${nombre}`;
+                    } else if (getLang && getLang() === 'fr') {
+                        mensaje = `🎉 <b>Aujourd'hui c'est l'anniversaire de :</b><br>${nombre}`;
+                    } else {
+                        mensaje = `🎉 <b>Hoy es el cumpleaños de:</b><br>${nombre}`;
+                    }
+                } else {
+                    mensaje = `🎉 <b>Hoy es el cumpleaños de:</b><br>${nombre}`;
+                }
+                var msgDiv = document.getElementById('msgCumpleID');
+                var accionesDiv = document.getElementById('accionesCumpleID');
+                var modal = document.getElementById('modalCumpleID');
+                var btnCerrar = document.getElementById('cerrarModalCumpleID');
+                if (msgDiv && accionesDiv && modal && btnCerrar) {
+                    msgDiv.innerHTML = mensaje;
+                    let acciones = '';
+                    if(data.whatsapp) {
+                        let msg = encodeURIComponent((typeof t==='function'?t('feliz_cumple'):'¡Feliz cumpleaños!') + ' ' + nombre);
+                        let num = data.whatsapp.replace(/[^0-9]/g, '');
+                        acciones += `<a href='https://wa.me/${num}?text=${msg}' target='_blank' style='background:#25D366;color:#fff;padding:10px 18px;border-radius:8px;margin:4px 2px;display:inline-block;text-decoration:none;font-weight:bold;font-size:1.1em;'><i class='fa-brands fa-whatsapp'></i> WhatsApp ${nombre}</a>`;
+                    }
+                    if(data.email) {
+                        let subject = encodeURIComponent((typeof t==='function'?t('feliz_cumple'):'Feliz cumpleaños'));
+                        let body = encodeURIComponent((typeof t==='function'?t('feliz_cumple'):'Feliz cumpleaños') + ' ' + nombre);
+                        acciones += `<a href='mailto:${data.email}?subject=${subject}&body=${body}' style='background:#2176d2;color:#fff;padding:10px 18px;border-radius:8px;margin:4px 2px;display:inline-block;text-decoration:none;font-weight:bold;font-size:1.1em;'><i class='fa-solid fa-envelope'></i> Email ${nombre}</a>`;
+                    }
+                    accionesDiv.innerHTML = acciones;
+                    modal.style.display = 'flex';
+                    btnCerrar.onclick = function() {
+                        modal.style.display = 'none';
+                    };
+                } else {
+                    // Si el DOM aún no está listo, reintentar
+                    setTimeout(mostrar, 100);
+                }
+            }
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mostrar);
+    } else {
+        setTimeout(mostrar, 50);
+    }
+})();
+</script>
+
 <!-- Botón flotante de Guía Rápida -->
 
 <!-- Selector de idioma flotante -->
@@ -817,23 +1081,30 @@
     </select>
 </div>
 <script>
-    // Sincronizar selector con idioma actual
+    // Sincronizar selector con idioma actual y memorizar siempre el último idioma seleccionado
     function getLangActual() {
-        return (typeof getLang === 'function') ? getLang() : (localStorage.getItem('lang') || 'es');
+        return localStorage.getItem('lang') || 'es';
     }
     function setLangActual(lang) {
         localStorage.setItem('lang', lang);
+        if(typeof t === 'function' && typeof traducirID === 'function') {
+            traducirID();
+        }
         window.dispatchEvent(new Event('storage'));
     }
     var sel = document.getElementById('idiomaFlotante');
     if(sel) {
+        // Al cargar, aplicar el idioma guardado
         sel.value = getLangActual();
+        if(typeof setLang === 'function') setLang(sel.value);
         sel.onchange = function() {
             setLangActual(this.value);
+            if(typeof setLang === 'function') setLang(this.value);
         };
         // Actualizar el valor si cambia desde otro lugar
         window.addEventListener('storage', function() {
             sel.value = getLangActual();
+            if(typeof setLang === 'function') setLang(sel.value);
         });
     }
 </script>
